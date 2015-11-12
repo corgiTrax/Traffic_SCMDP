@@ -4,9 +4,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy as cp
 import scipy.stats as ss
+import math
+NUM_EXP = int(sys.argv[1])
+dirname = sys.argv[2]
 
-NUM_EXP = 50
-dirname = "data_5/"
+# plot only every INTERVAL element
+INTERVAL = int(sys.argv[3]) # out of 100
+
+def skip_array(array):
+    n = len(array)
+    new_array = np.zeros(n/INTERVAL + 1)
+    for i in range(n):
+        if i % INTERVAL == 0:
+            new_array[i / INTERVAL] = array[i]
+    return new_array
 
 def process_file(filename):
     data_file = open(filename, 'r')
@@ -45,6 +56,13 @@ def process_data(name):
     vs_std = np.std(vs, axis = 0)
     dof = np.empty(len(eps[0]))
     dof.fill(NUM_EXP)
+    
+    eps = skip_array(eps[0])
+    rs_mean = skip_array(rs_mean)
+    rs_std = skip_array(rs_std)
+    vs_mean = skip_array(vs_mean)
+    vs_std = skip_array(vs_std)
+    dof = skip_array(dof)
 
     return dof, eps, rs_mean, rs_std, vs_mean, vs_std
 
@@ -58,25 +76,32 @@ smdpbf_dof, smdpbf_eps, smdpbf_rs_mean, smdpbf_rs_std, smdpbf_vs_mean, smdpbf_vs
 
 if SHOW_REWARD:
     # plot rewards
-    plt.errorbar(cent_eps[0], cent_rs_mean, yerr=ss.t.ppf(0.95, cent_dof)*cent_rs_std, color = 'c')
-    plt.errorbar(rand_eps[0], rand_rs_mean, yerr=ss.t.ppf(0.95, rand_dof)*rand_rs_std, color = 'k')
-    plt.errorbar(safe_eps[0], safe_rs_mean, yerr=ss.t.ppf(0.95, safe_dof)*safe_rs_std, color = 'y')
-    plt.errorbar(grdy_eps[0], grdy_rs_mean, yerr=ss.t.ppf(0.95, grdy_dof)*grdy_rs_std, color = 'g')
-    plt.errorbar(smdpphi_eps[0], smdpphi_rs_mean, yerr=ss.t.ppf(0.95, smdpphi_dof)*smdpphi_rs_std, color = 'r')
-    plt.errorbar(smdpbf_eps[0], smdpbf_rs_mean, yerr=ss.t.ppf(0.95, smdpbf_dof)*smdpbf_rs_std, color = 'b')
-#    plt.xlim((-1,100))
+    fig, (ax1) = plt.subplots(1,1)
+    ax1.errorbar(cent_eps, cent_rs_mean, yerr=ss.t.ppf(0.95, cent_dof)*cent_rs_std, color = 'c', fmt = '^', ls = 'dotted', label="Centralized")
+    ax1.errorbar(rand_eps, rand_rs_mean, yerr=ss.t.ppf(0.95, rand_dof)*rand_rs_std, color = 'k', fmt = 'x', ls = 'dotted', label = "Random")
+    ax1.errorbar(safe_eps, safe_rs_mean, yerr=ss.t.ppf(0.95, safe_dof)*safe_rs_std, color = 'm', fmt = 'o', ls = 'dotted', label = "Safe")
+    ax1.errorbar(grdy_eps, grdy_rs_mean, yerr=ss.t.ppf(0.95, grdy_dof)*grdy_rs_std, color = 'g', fmt = '>', ls = 'dotted', label = "Greedy")
+    ax1.errorbar(smdpphi_eps, smdpphi_rs_mean, yerr=ss.t.ppf(0.95, smdpphi_dof)*smdpphi_rs_std, color = 'r', fmt = 'D', ls = 'dotted', label = "SCMDP: feasible")
+    ax1.errorbar(smdpbf_eps, smdpbf_rs_mean, yerr=ss.t.ppf(0.95, smdpbf_dof)*smdpbf_rs_std, color = 'b', fmt = 'H', ls = 'dotted', label = "SCMDP: heuristic")
+    handles, labels = ax1.get_legend_handles_labels()
+    ax1.legend(handles, labels, loc = 'upper left')
+    plt.xlim((-1,100))
     plt.show()
 
 #else:
 # plot violations
-    plt.errorbar(cent_eps[0], cent_vs_mean, yerr=ss.t.ppf(0.95, cent_dof)*cent_vs_std, color = 'c')
-    plt.errorbar(rand_eps[0], rand_vs_mean, yerr=ss.t.ppf(0.95, rand_dof)*rand_vs_std, color = 'k')
-    plt.errorbar(safe_eps[0], safe_vs_mean, yerr=ss.t.ppf(0.95, safe_dof)*safe_vs_std, color = 'y')
-    plt.errorbar(grdy_eps[0], grdy_vs_mean, yerr=ss.t.ppf(0.95, grdy_dof)*grdy_vs_std, color = 'g')
-    plt.errorbar(smdpphi_eps[0], smdpphi_vs_mean, yerr=ss.t.ppf(0.95, smdpphi_dof)*smdpphi_vs_std, color = 'r')
-    plt.errorbar(smdpbf_eps[0], smdpbf_vs_mean, yerr=ss.t.ppf(0.95, smdpbf_dof)*smdpbf_vs_std, color = 'b')
-    #plt.yscale("log") #,linthreshy=100)
-#    ax.set_yscale("log")
+    fig, (ax1) = plt.subplots(1,1)
+    ax1.errorbar(cent_eps, cent_vs_mean, yerr=ss.t.ppf(0.95, cent_dof)*cent_vs_std, color = 'c', fmt = '^', ls = 'dotted', label="Centralized")
+    ax1.errorbar(rand_eps, rand_vs_mean, yerr=ss.t.ppf(0.95, rand_dof)*rand_vs_std, color = 'k', fmt = 'x', ls = 'dotted', label = "Random")
+    ax1.errorbar(safe_eps, safe_vs_mean, yerr=ss.t.ppf(0.95, safe_dof)*safe_vs_std, color = 'm', fmt = 'o', ls = 'dotted', label = "Safe")
+    ax1.errorbar(grdy_eps, grdy_vs_mean, yerr=ss.t.ppf(0.95, grdy_dof)*grdy_vs_std, color = 'g', fmt = '>', ls = 'dotted', label = "Greedy")
+    ax1.errorbar(smdpphi_eps, smdpphi_vs_mean, yerr=ss.t.ppf(0.95, smdpphi_dof)*smdpphi_vs_std, color = 'r', fmt = 'D', ls = 'dotted', label = "SCMDP: feasible")
+    ax1.errorbar(smdpbf_eps, smdpbf_vs_mean, yerr=ss.t.ppf(0.95, smdpbf_dof)*smdpbf_vs_std, color = 'b', fmt = 'H', ls = 'dotted', label = "SCMDP: heuristic")
+    handles, labels = ax1.get_legend_handles_labels()
+    ax1.legend(handles, labels, loc = 'upper right')
+    ax1.set_yscale('symlog', linthreshy = 100)#nonposy='clip')
+    plt.xlim((-1,100))
+    plt.ylim((-10,100000))
     plt.show()
 
 
