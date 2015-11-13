@@ -1,3 +1,4 @@
+import numpy as np
 from config import *
 
 class Block:
@@ -23,9 +24,11 @@ class Block:
 
     def congest(self):
         '''return true if a car can successfuly move into the block, based on current traffic capacity'''
-        if self.cap_cur <= self.cap_bound: return False
-        else:
-            return random.random() > self.congest_prob()
+        if self.cap_cur < self.cap_bound: return False
+        else: return True
+        # take this out, for now simply cannot enter congestion state
+        #else:
+        #   return random.random() > self.congest_prob()
 
 class World:
     def __init__(self):
@@ -131,6 +134,17 @@ class World:
             for j in range(self.columns):
                 print('{:>4}'.format(self.world_map[i][j].cap_bound)),
             print('\n')
+    
+    def get_map(self):
+        '''return a map to atar algorithm, 0 being passable and 1 being congest or offroad'''
+        astar_map = np.zeros((self.rows, self.columns))
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.world_map[i][j].block_type == OFFROAD:
+                    astar_map[i][j] = 1
+                elif self.world_map[i][j].congest(): 
+                    astar_map[i][j] = 1
+        return astar_map
 
     def draw(self, isNew = False):
         if isNew:
@@ -154,7 +168,7 @@ class World:
                 if self.world_map[i][j].block_type != OFFROAD:
                     block = cg.Rectangle(cg.Point(j * CELL_SIZE, i * CELL_SIZE), cg.Point((j + 1) * CELL_SIZE, (i + 1) * CELL_SIZE))
                     # normal traffic situation
-                    if self.world_map[i][j].cap_bound >= self.world_map[i][j].cap_cur: 
+                    if self.world_map[i][j].cap_bound > self.world_map[i][j].cap_cur: 
                         block.setFill("lightblue")
                     else: # traffic jam
                         block.setFill("pink")
