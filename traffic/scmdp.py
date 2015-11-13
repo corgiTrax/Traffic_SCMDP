@@ -194,6 +194,6 @@ if __name__ == "__main__":
     # call solve and store resulted matrices
     test_world = world.World()
     state_dict = state.StateDict(test_world) 
-    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 5, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 200, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
     scmdp_solver.solve()
     scmdp_solver.save_to_file()

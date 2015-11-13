@@ -146,6 +146,20 @@ class World:
                     astar_map[i][j] = 1
         return astar_map
 
+    def print_total_cap(self):
+        road_state_count = 0
+        total_cap = 0
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.world_map[i][j].block_type != OFFROAD:
+                    road_state_count += 1
+                    if not([i,j] in START) and not([i,j] in DESTINATION):
+                        total_cap += self.world_map[i][j].cap_bound
+        print("Number of road locations:")
+        print(road_state_count)
+        print("Total capacities except start and end:")
+        print(total_cap)
+
     def draw(self, isNew = False):
         if isNew:
             width_ = (self.columns + 2) * CELL_SIZE
@@ -183,8 +197,8 @@ class World:
                     cap_cur.draw(self.window)
 
 if __name__ == '__main__':
-    main()
-    # test_world = World()
+    test_world = World()
+    test_world.print_total_cap()
     # test_world.print_cap_map()
     # test_world.draw()
     # raw_input("Print Enter to Exit")
