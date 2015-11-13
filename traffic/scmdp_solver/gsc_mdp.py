@@ -18,23 +18,16 @@ import heu_bf_policy as bf
 import mc_x as MC
 
 
-def mdp(G_, R_, RT_, L_, d_, x0_, gamma_):
-    G = cp.deepcopy(G_)
-    R = cp.deepcopy(R_)
-    RT = cp.deepcopy(RT_)
-    L = cp.deepcopy(L_)
-    d = cp.deepcopy(d_)
-    x0 = cp.deepcopy(x0_)
-    gamma = cp.deepcopy(gamma_)
-    [T, n, A]=R.shape
-    T=T+1
+def mdp(G, R, RT, L, d, x0, gamma):
+    [T, n, A] = R.shape
+    T = T+1
     # prelocating
 
     # unconstrained  policy
-    un_U=np.zeros((n, T))
-    un_Q=np.zeros((T-1, n, A))
-    un_M=np.zeros((T-1, n, n))
-    un_x=np.zeros((n, T))
+#    un_U=np.zeros((n, T))
+#    un_Q=np.zeros((T-1, n, A))
+#    un_M=np.zeros((T-1, n, n))
+#    un_x=np.zeros((n, T))
 
     # basic feasible policy
     phi_U=np.zeros((n, T))
@@ -56,7 +49,7 @@ def mdp(G_, R_, RT_, L_, d_, x0_, gamma_):
     bf_x=np.zeros((n, T))
 
     # Initialization
-    un_U[:,[T-1]]=RT
+#    un_U[:,[T-1]]=RT
     phi_U[:,[T-1]]=RT
     pro_U[:,[T-1]]=RT
     bf_U[:,[T-1]]=RT
@@ -65,12 +58,11 @@ def mdp(G_, R_, RT_, L_, d_, x0_, gamma_):
     # Backward Induction
     for j in range(T-2,-1,-1):
 
-        [un_U[:,[j]],un_Q[j,:,:],un_M[j,:,:]]=un.policy(G, R[j,:,:], un_U[:,[j+1]], gamma)
+#        [un_U[:,[j]],un_Q[j,:,:],un_M[j,:,:]]=un.policy(G, R[j,:,:], un_U[:,[j+1]], gamma)
         [phi_U[:,[j]],phi_Q[j,:,:],phi_M[j,:,:],phi_opt[0,j]]=phi.policy(G, R[j,:,:], L, d, phi_U[:,j+1], gamma)
         #[pro_U[:,j],pro_Q[j,:,:],pro_M[j,:,:]]=pro_policy(G, R[j,:,:], d, pro_U[:,j+1], gamma);
 
-
-    un_x=MC.mc_x(x0,un_M)
+#    un_x=MC.mc_x(x0,un_M)
     phi_x=MC.mc_x(x0,phi_M)
 
 
@@ -95,7 +87,8 @@ def mdp(G_, R_, RT_, L_, d_, x0_, gamma_):
 
     # print("M shape", np.shape(phi_M))
 
-    return un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x
+    return phi_Q, phi_x, bf_Q, bf_x
+#    return un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x
 
 
 

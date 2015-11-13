@@ -4,6 +4,7 @@ import scmdp_solver.gsc_mdp as GSC
 import copy as cp
 import roulette
 from tempfile import TemporaryFile
+from scipy import sparse
 
 from config import *
 import world
@@ -58,7 +59,7 @@ class SCMDP:
         self.gamma = 0.99
         
         # policy matrix
-        self.bf_Q = []; self.bf_x = []; self.phi_Q = []; self.phi_x = []; self.un_Q = []; self.un_x = []
+        self.bf_Q = []; self.bf_x = []; self.phi_Q = []; self.phi_x = []; #self.un_Q = []; self.un_x = []
 
     def construct_G(self):
         '''A x n x n'''
@@ -142,7 +143,7 @@ class SCMDP:
         # print_m(self.x0)
 
     def solve(self):
-        [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("scmdp policy solved")
 #        print(self.bf_Q)
         print(np.dot(self.L, self.bf_x))
@@ -158,16 +159,16 @@ class SCMDP:
 
     def save_to_file(self):
         '''save un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x to .npy files'''
-        np.save("policy/un_Q", self.un_Q)
-        np.save("policy/un_x", self.un_x)
+#        np.save("policy/un_Q", self.un_Q)
+#        np.save("policy/un_x", self.un_x)
         np.save("policy/phi_Q", self.phi_Q)
         np.save("policy/phi_x", self.phi_x)
         np.save("policy/bf_Q", self.bf_Q)
         np.save("policy/bf_x", self.bf_x)
 
     def load_from_file(self):
-        self.un_Q = np.load("policy/un_Q.npy")
-        self.un_x = np.load("policy/un_x.npy")
+#        self.un_Q = np.load("policy/un_Q.npy")
+#        self.un_x = np.load("policy/un_x.npy")
         self.phi_Q = np.load("policy/phi_Q.npy")
         self.phi_x = np.load("policy/phi_x.npy")
         self.bf_Q = np.load("policy/bf_Q.npy")

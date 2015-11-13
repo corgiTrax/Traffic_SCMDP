@@ -27,8 +27,8 @@ NUM_BLK_BTW = 1
 DEF_TRAFFIC = 0
 # Map
 CAP_MAX = NUM_CAR/2 * CAP_SMALL + NUM_CAR/2 * CAP_BIG
-CAP_HZ_ROAD = [4,8]
-CAP_VT_ROAD = [10,6]
+CAP_HZ_ROAD = [4,8,6]
+CAP_VT_ROAD = [10,6,4]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 # start and destination positions
