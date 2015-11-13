@@ -6,13 +6,6 @@ from config import *
 import world
 import car
 
-A_STAR = 0 # Shortest path
-TIME_A_STAR = 1
-SCMDPPHI = 2
-SCMDPBF = 3
-ALGS = [A_STAR, TIME_A_STAR, SCMDPPHI, SCMDPBF]
-
-
 class Experiment:
     def __init__(self, alg, data_file, vis = True):
         # initialize the world
@@ -49,19 +42,23 @@ class Experiment:
         while (True):
             # visualization
             if self.vis:
-                print("==========================================================")
-                print("{:<6} {:<6} {:<6}".format("CarID", "Position", "Destination"))
-                for car in self.cars:
-                    car.print_status()
+                #print("==========================================================")
+                #print("{:<6} {:<6} {:<6}".format("CarID", "Position", "Destination"))
+                #for car in self.cars:
+                #    car.print_status()
                 self.test_world.draw()
                 self.test_world.window.getMouse()
             
             # cars move sequentially
-            for car in self.cars: 
-                if self.alg == A_STAR:           
-                    car.greedy_act() 
-            
-new_exp = Experiment(alg = A_STAR, data_file = "data/temp")
+            for car in self.cars:
+                if not(car.arrived()):
+                    if self.alg == STP:           
+                        car.greedy_act() 
+                    if self.alg == ASTAR:
+                        car.astar_act()
+
+            print(self.test_world.get_map())
+new_exp = Experiment(alg = ASTAR, data_file = "data/temp")
 new_exp.run()
 
 raw_input("Please Press Enter to Exit")

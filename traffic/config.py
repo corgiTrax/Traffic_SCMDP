@@ -49,10 +49,13 @@ CONGEST_FACTOR = 1.0
 # for planning only
 TRANS_SUC_RATE = 1.0
 
-
-
 # for visualization
 CELL_SIZE = 50
 
+STP = 0 # Shortest path
+ASTAR = 1
+SCMDPPHI = 2
+SCMDPBF = 3
+ALGS = [STP, ASTAR, SCMDPPHI, SCMDPBF]
 
 
