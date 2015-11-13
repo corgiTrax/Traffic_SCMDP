@@ -7,7 +7,7 @@
 # discount factor gamma(1,1)
 
 import numpy as np
-from cvxopt import matrix, solvers
+from cvxopt import spmatrix, matrix, solvers
 
 # solvers.options['show_progress'] = False
 

@@ -125,7 +125,7 @@ class SCMDP:
                 if self.world.world_map[i][j].block_type != OFFROAD:
                     self.d[state_count, 0] = 1.0 * self.world.world_map[i][j].cap_bound / NUM_CAR
                     state_count += 1
-        print_m(self.d)
+        # print_m(self.d)
 
     def construct_x0(self):
         ''' n x 1, assume cars are distributed equally in start '''
@@ -193,6 +193,6 @@ if __name__ == "__main__":
     # call solve and store resulted matrices
     test_world = world.World()
     state_dict = state.StateDict(test_world) 
-    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 10, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 5, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
     scmdp_solver.solve()
     scmdp_solver.save_to_file()
