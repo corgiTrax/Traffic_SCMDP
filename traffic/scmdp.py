@@ -5,6 +5,7 @@ import copy as cp
 import roulette
 from tempfile import TemporaryFile
 from scipy import sparse
+import time
 
 from config import *
 import world
@@ -192,8 +193,10 @@ class SCMDP:
 
 if __name__ == "__main__":
     # call solve and store resulted matrices
+    start_time = time.time()
     test_world = world.World()
     state_dict = state.StateDict(test_world) 
-    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 200, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 50, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
     scmdp_solver.solve()
     scmdp_solver.save_to_file()
+    print(time.time() - start_time)

@@ -1,4 +1,5 @@
 import numpy as np
+import graphics as cg
 from config import *
 
 class Block:
@@ -159,6 +160,8 @@ class World:
         print(road_state_count)
         print("Total capacities except start and end:")
         print(total_cap)
+        print("Distance from start to end: ")
+        print(self.rows + self.columns - 1)
 
     def draw(self, isNew = False):
         if isNew:
