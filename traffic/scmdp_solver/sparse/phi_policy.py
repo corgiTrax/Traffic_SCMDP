@@ -12,12 +12,11 @@ from scipy import sparse
 import cvxtool
 #from scipy.optimize import linprog
 
-solvers.options["msg_lev"] = "GLP_MSG_OFF"
-solvers.options['show_progress'] = False
-solvers.options['maxiters'] = 100
-solvers.options['reltol'] = 1e-1
-solvers.options['abstol'] = 1e-7
-solvers.options['feastol'] = 1e-1
+#solvers.options['show_progress'] = False
+#solvers.options['maxiters'] = 10
+#solvers.options['reltol'] = 1e-3
+#solvers.options['abstol'] = 1e-3
+#solvers.options['feastol'] = 1e-3
 
 def policy(G, R0, L, d, u_next, gamma):
 
@@ -229,9 +228,9 @@ def policy(G, R0, L, d, u_next, gamma):
     Aineq= sparse.vstack([Aineq_r1, Aineq_r2, Aineq_r3, Aineq_r4, Aineq_r5, Aineq_r6])
     bineq= sparse.vstack([d,        z_n_1,     z_nA_1,     z_mn_1,     z_mm_1,     z_m_1])
 
-#    Aeq= matrix(Aeq.toarray())
+#    Aeq= matrix(Aeq)
 #    beq= matrix(beq)
-#    Aineq= matrix(Aineq.toarray())
+#    Aineq= matrix(Aineq)
 #    bineq= matrix(bineq)
 #    c= matrix(c)
     
@@ -249,7 +248,7 @@ def policy(G, R0, L, d, u_next, gamma):
 #    c = c.toarray()[:,0] 
 
     # call solver
-    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'glpk')
+    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'None')
 #    sol = glpk.lp(c,Aineq,bineq,Aeq,beq)
 #    var= np.array(sol['x'])
     var = sparse.lil_matrix(sol['x'])

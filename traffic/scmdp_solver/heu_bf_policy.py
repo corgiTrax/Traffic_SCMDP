@@ -15,7 +15,8 @@ from cvxopt import matrix, solvers
 from scipy import sparse
 import cvxtool
 
-# solvers.options['show_progress'] = False
+solvers.options["msg_lev"] = "GLP_MSG_OFF"
+solvers.options['show_progress'] = False
 
 def policy(g, rt, L, d, x, u_next, u_ref, opt_ref,  gamma):
     # add a small constant to resolve numerical issue
@@ -262,16 +263,19 @@ def policy(g, rt, L, d, x, u_next, u_ref, opt_ref,  gamma):
 
     # note: toarray() might not be efficient
     Aeq = cvxtool.scipy_sparse_to_spmatrix(Aeq.tocoo()) 
+#    Aeq = matrix(Aeq.toarray()) 
     beq = matrix(beq.toarray())
     Aineq = cvxtool.scipy_sparse_to_spmatrix(Aineq.tocoo())
+#    Aineq = matrix(Aineq.toarray()) 
     bineq = matrix(bineq.toarray())
     c = matrix(c.toarray()) 
 
     # call solver
-    sol= solvers.lp(c,Aineq,bineq,Aeq,beq)
+    sol= solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'glpk')
 #    var = np.array(sol['x'])
 #    temp_q=var[0:n*A,:]
 #    Q=temp_q.reshape(n,A)
+#    print("Solution:", sol)
     var = sparse.lil_matrix(sol['x'])
     temp_q = sparse.lil_matrix(var[0:n*A,:])
     Q = temp_q.reshape((n,A))

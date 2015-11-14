@@ -14,15 +14,17 @@ import state
 
 np.set_printoptions(linewidth = 1000, precision = 3, suppress = True, threshold = 'nan')
 
-def print_m(matrix):
-    '''visualize a 2d matrix'''
-    (row,col) = np.shape(matrix)
-    print("   "),
-    for j in range(col):
-        print(str(j) + ' '),
-    print(" ")
+def print_matrix(matrix):
+    (row,col) = numpy.shape(matrix)
+    print("{:<4}".format(' ')), # print head
+    for j in range(col): # print col numbers
+        print("{:<4}".format(j)),
+    print('\n'),
     for i in range(row):
-        print(i, matrix[i])
+        print("{:<4}".format(i)), # print row numbers
+        for j in range(col):
+            print("{:<4}".format(matrix[i,j])),
+        print('\n'),
 
 def print_part(matrix, row_s, row_e, col_s, col_e):
     print("{:<4}".format(' ')), # print head
@@ -44,7 +46,9 @@ class SCMDP:
         self.A = A  # number of actions
         self.m = m  # number of constraints
         self.trans_suc_rate = trans_suc_rate # transition success rate       
-
+        
+        print("Construction Start")
+        start_time = time.time()
         # construct transition matrix G
         self.construct_G()  
         # construct reward matrix R (over T-1 horizon)
@@ -58,7 +62,8 @@ class SCMDP:
         self.construct_x0()
         # discount factor
         self.gamma = 0.99
-        
+        print("Time: ", time.time() - start_time)
+
         # policy matrix
         self.bf_Q = []; self.bf_x = []; self.phi_Q = []; self.phi_x = []; #self.un_Q = []; self.un_x = []
 
@@ -75,6 +80,7 @@ class SCMDP:
                     state_j = self.sdic.get_state(j) # start from this state
                     loc_j = [state_j[0], state_j[1]]
                     result_loc = self.world.move_consq(loc_j, act)
+                    # if state.same_loc(loc_j, [1,2]): print(act, "at: ", result_loc)
                     for i in range(self.n):
                         state_i = self.sdic.get_state(i)
                         loc_i = [state_i[0], state_i[1]]
@@ -82,7 +88,7 @@ class SCMDP:
                         and state_i[2] == state_j[2] and state_i[3] == state_j[3] and state_i[4] == state_j[4]:
                             G_act[i][j] = 1
                 self.G[act,:,:] = cp.deepcopy(G_act)
-        #print_part(self.G[LEFT], 0, 167, 167, 167)
+        #print_matrix(self.G[DOWN,:,:])
         #print(np.shape(self.G))
 
     def construct_RT(self):
@@ -144,9 +150,12 @@ class SCMDP:
         # print_m(self.x0)
 
     def solve(self):
+#        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("scmdp policy solved")
+#        print(self.phi_Q)
 #        print(self.bf_Q)
+#        print("phix: ", self.phi_x)
         print(np.dot(self.L, self.bf_x))
 #        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
 #        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
@@ -196,7 +205,7 @@ if __name__ == "__main__":
     start_time = time.time()
     test_world = world.World()
     state_dict = state.StateDict(test_world) 
-    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 50, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 20, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
     scmdp_solver.solve()
     scmdp_solver.save_to_file()
     print(time.time() - start_time)

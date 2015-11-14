@@ -112,6 +112,7 @@ class World:
         if (pos[ROW] < 0): pos[ROW] = 0
         if (pos[COL] >= self.columns): pos[COL] = self.columns - 1
         if (pos[COL] < 0): pos[COL] = 0
+        if self.world_map[pos[ROW]][pos[COL]].block_type == OFFROAD: pos = cp.deepcopy(agent_pos) # !!!!
         return pos
 
     def dist(self, start_pos, dest_pos):
