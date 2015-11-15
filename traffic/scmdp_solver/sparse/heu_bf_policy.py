@@ -15,7 +15,8 @@ from cvxopt import matrix, solvers
 from scipy import sparse
 import cvxtool
 
-# solvers.options['show_progress'] = False
+solvers.options["msg_lev"] = "GLP_MSG_OFF"
+solvers.options['show_progress'] = False
 
 def policy(g, rt, L, d, x, u_next, u_ref, opt_ref,  gamma):
     # add a small constant to resolve numerical issue

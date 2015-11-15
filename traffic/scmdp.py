@@ -1,6 +1,6 @@
 import numpy as np
 from cvxopt import matrix, solvers
-import scmdp_solver.gsc_mdp as GSC
+import scmdp_solver.sparse.gsc_mdp as GSC
 import copy as cp
 import roulette
 from tempfile import TemporaryFile
@@ -61,7 +61,7 @@ class SCMDP:
         # initial distribution of the agents 
         self.construct_x0()
         # discount factor
-        self.gamma = 0.99
+        self.gamma = 1.0
         print("Time: ", time.time() - start_time)
 
         # policy matrix
@@ -154,7 +154,7 @@ class SCMDP:
         [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("scmdp policy solved")
 #        print(self.phi_Q)
-#        print(self.bf_Q)
+        print(self.bf_x)
 #        print("phix: ", self.phi_x)
         print(np.dot(self.L, self.bf_x))
 #        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
@@ -205,7 +205,7 @@ if __name__ == "__main__":
     start_time = time.time()
     test_world = world.World()
     state_dict = state.StateDict(test_world) 
-    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 10, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = NUM_EPISODE, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
     scmdp_solver.solve()
     scmdp_solver.save_to_file()
     print(time.time() - start_time)
