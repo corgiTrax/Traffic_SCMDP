@@ -61,7 +61,7 @@ class SCMDP:
         # initial distribution of the agents 
         self.construct_x0()
         # discount factor
-        self.gamma = 1.0
+        self.gamma = 0.2
         print("Time: ", time.time() - start_time)
 
         # policy matrix
@@ -99,7 +99,7 @@ class SCMDP:
             # if the current position is equal to destination
             if state.same_loc([state_vec[0], state_vec[1]], [state_vec[2], state_vec[3]]):
                 self.RT[i,0] = REWARD
-        #print_m(self.RT)
+        # print_matrix(self.RT)
 
     def construct_R(self):
         ''' (T-1) x n x A'''
@@ -109,7 +109,7 @@ class SCMDP:
             R0[:,a] = cp.deepcopy(self.RT[:,0])
         for t in range(self.T-1):
             self.R[t,:,:] = cp.deepcopy(R0)
-        # print_m(self.R[1])
+        # print_matrix(self.R[-2])
 
     def construct_L(self):
         ''' m x n'''
@@ -153,10 +153,10 @@ class SCMDP:
 #        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("scmdp policy solved")
-#        print(self.phi_Q)
-        print(self.bf_x)
-#        print("phix: ", self.phi_x)
-        print(np.dot(self.L, self.bf_x))
+        print("phi_Q", self.phi_Q)
+        print("bf_Q", self.bf_Q)
+        print("phix: ", np.dot(self.L, self.phi_x))
+        print("bfx: ", np.dot(self.L, self.bf_x))
 #        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
 #        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
 #        res_bf = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, bf_x)

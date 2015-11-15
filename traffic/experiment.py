@@ -5,6 +5,8 @@ Experiment file
 from config import *
 import world
 import car
+import scmdp
+import state
 
 class Experiment:
     def __init__(self, alg, data_file, vis = True):
@@ -30,6 +32,10 @@ class Experiment:
         self.vis = vis
         if self.vis:
             self.test_world.draw(isNew = True)
+        
+        self.state_dict = state.StateDict(self.test_world) 
+        self.scmdp_selector = scmdp.SCMDP(world_ = self.test_world, sdic_ = self.state_dict, T = NUM_EPISODE, m = self.test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+        self.scmdp_selector.load_from_file()
 
     def record(self):
         '''write performance data to file'''
@@ -39,7 +45,7 @@ class Experiment:
 
     def run(self):
         self.data_file = open(self.data_file_name, 'w')
-        while (True):
+        for episode in range(NUM_EPISODE):
             # visualization
             if self.vis:
                 #print("==========================================================")
@@ -56,9 +62,11 @@ class Experiment:
                         car.greedy_act() 
                     if self.alg == ASTAR:
                         car.astar_act()
+                    if self.alg == SCMDPBF:
+                        car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
 
             print(self.test_world.get_map())
-new_exp = Experiment(alg = ASTAR, data_file = "data/temp")
+new_exp = Experiment(alg = SCMDPBF, data_file = "data/temp")
 new_exp.run()
 
 raw_input("Please Press Enter to Exit")

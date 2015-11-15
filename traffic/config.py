@@ -6,9 +6,9 @@ ROW = 0
 COL = 1
 
 #planning horizon
-NUM_EPISODE = 20
+NUM_EPISODE = 10
 
-NUM_CAR = 20
+NUM_CAR = 2
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
