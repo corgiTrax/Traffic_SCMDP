@@ -90,4 +90,4 @@ if __name__ == "__main__":
        [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
 
     print_matrix(nmap)
-    print astar_path(nmap, (0,0), (10,10))
+    print(astar_path(nmap, (0,0), (10,10)))

@@ -7,7 +7,7 @@
 # discount factor gamma(1,1)
 
 import numpy as np
-from cvxopt import spmatrix, matrix, solvers, glpk
+from cvxopt import spmatrix, matrix, solvers
 from scipy import sparse
 import cvxtool
 from scipy.optimize import linprog
@@ -252,11 +252,13 @@ def policy(G, R0, L, d, u_next, gamma):
 #    var = np.zeros((len(sol['x']), 1))
 #    var[:,0] = sol['x']
 #    optval = sol['fun']
+#    print(optval)
 
     # call solver
-    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'None')
+    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'glpk')
     var = sparse.lil_matrix(sol['x'])
     optval=np.array(sol['primal objective'])
+    print(optval)
 #    print("y: ", var[n*A + n*n + m*n +m*m +n:n*A + n*n + m*n +m*m +n + m].toarray())
 #    print("z: ", var[-1].toarray()) 
 #    print("solution: ", sol)
