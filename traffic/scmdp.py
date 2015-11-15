@@ -205,7 +205,7 @@ if __name__ == "__main__":
     start_time = time.time()
     test_world = world.World()
     state_dict = state.StateDict(test_world) 
-    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 20, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+    scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = 10, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
     scmdp_solver.solve()
     scmdp_solver.save_to_file()
     print(time.time() - start_time)

@@ -30,7 +30,8 @@ if int(sp) == 0:
     #print(D.shape)
 else:
     A = lil_matrix(np.ones((3,4)))
-    B = A.reshape((4,3))
+    A = -1 * A
+    #B = A.reshape((4,3))
     print(A.toarray())
     print(B.toarray())
     #A = matrix(A.todense())

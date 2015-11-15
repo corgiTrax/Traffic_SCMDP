@@ -1,10 +1,11 @@
 import numpy as np
 from cvxopt import matrix, solvers
-import gsc_mdp as GSC
+import scmdp_solver.sparse.gsc_mdp as GSC
 import copy as cp
 import roulette
+from config import *
 
-np.set_printoptions(precision = 2, suppress = True, threshold = 'nan')
+np.set_printoptions(precision = 2, linewidth = 1000, suppress = True, threshold = 'nan')
 
 class SCMDP:
     def __init__(self, T, n, A, trans_suc_rate, reward_vec, cap_vec, x0):
@@ -17,7 +18,7 @@ class SCMDP:
         self.n = n
         # number of actions
         self.A = A
-        
+
         # construct transition matrix G
         self.trans_suc_rate = trans_suc_rate
         self.G = np.zeros((A, n, n))
@@ -58,21 +59,19 @@ class SCMDP:
         # print(self.x0)
 
         # discount factor
-        self.gamma = 0.99
+        self.gamma = 1 
         
         # policy matrix
-        self.bf_Q = []
-        self.bf_x = []
-        self.phi_Q = []
-        self.phi_x = []
-        self.un_Q = []
-        self.un_x = []
+        # self.bf_Q = []
+        # self.bf_x = []
+        # self.phi_Q = []
+        # self.phi_x = []
 
     def solve(self):
-        [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("scmdp policy solved")
-#        print(self.bf_Q)
-#        print(bf_x)
+#        print("phiX: ", self.phi_x)
+#        print("bfX: ", self.bf_x)
 #        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
 #        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
 #        res_bf = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, bf_x)
@@ -82,6 +81,21 @@ class SCMDP:
 #        print(np.dot(self.L,un_x))
 #        print(np.dot(self.L,phi_x))
 #        print(np.dot(self.L,bf_x))
+
+    def save_to_file(self, path):
+        '''save un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x to .npy files'''
+#        np.save("policy/un_Q", self.un_Q)
+#        np.save("policy/un_x", self.un_x)
+        np.save(path + "phi_Q", self.phi_Q)
+        np.save(path + "phi_x", self.phi_x)
+        np.save(path + "bf_Q", self.bf_Q)
+        np.save(path + "bf_x", self.bf_x)
+
+    def load_from_file(self, path):
+        self.phi_Q = np.load(path + "phi_Q.npy")
+        self.phi_x = np.load(path + "phi_x.npy")
+        self.bf_Q = np.load(path + "bf_Q.npy")
+        self.bf_x = np.load(path + "bf_x.npy")
 
     def choose_act(self, state, T):
         policy = self.bf_Q[T][state]
@@ -99,8 +113,10 @@ class SCMDP:
         # print("Action selected:", action)
         return action
 
-#sc = SCMDP(T = 3, n = 11, A = 11, trans_suc_rate = 0.9, reward_vec = [0, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1], \
-#cap_vec = [1.0, 0.9, 0.0, 0, 0, 0, 0, 0, 0, 0, 0], \
-#x0 = [1.0, 0.0, 0.0, 0,0,0,0,0,0,0,0])
-#sc.solve()
-#sc.choose_act(state = 1, T = 1)
+if __name__ == "__main__":
+    # initialize scmdp solver
+    SCMDP_SELECTOR = SCMDP(T = NUM_EPISODE, n = NUM_STATE, A = NUM_STATE,\
+    trans_suc_rate = TRANS_SUC_RATE, reward_vec = REWARD, cap_vec = CAP_DENSITY, x0 = INIT_DENSITY)
+    # solve for policy matrix
+    SCMDP_SELECTOR.solve()
+    SCMDP_SELECTOR.save_to_file(POLICY_PATH)
