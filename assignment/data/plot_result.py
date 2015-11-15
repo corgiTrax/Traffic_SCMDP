@@ -85,7 +85,7 @@ if SHOW_REWARD:
     ax1.errorbar(smdpbf_eps, smdpbf_rs_mean, yerr=ss.t.ppf(0.95, smdpbf_dof)*smdpbf_rs_std, color = 'b', fmt = 'H', ls = 'dotted', label = "SCMDP: heuristic")
     handles, labels = ax1.get_legend_handles_labels()
     ax1.legend(handles, labels, loc = 'upper left')
-    plt.xlim((-1,100))
+ #   plt.xlim((-1,None))
     plt.show()
 
 #else:
@@ -100,8 +100,8 @@ if SHOW_REWARD:
     handles, labels = ax1.get_legend_handles_labels()
     ax1.legend(handles, labels, loc = 'upper right')
     ax1.set_yscale('symlog', linthreshy = 100)#nonposy='clip')
-    plt.xlim((-1,100))
-    plt.ylim((-10,100000))
+#    plt.xlim((-1,None))
+#    plt.ylim((-10,None))
     plt.show()
 
 

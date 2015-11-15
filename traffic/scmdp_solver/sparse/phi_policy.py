@@ -10,13 +10,14 @@ import numpy as np
 from cvxopt import spmatrix, matrix, solvers, glpk
 from scipy import sparse
 import cvxtool
-#from scipy.optimize import linprog
+from scipy.optimize import linprog
 
+#solvers.options["msg_lev"] = "GLP_MSG_OFF"
 #solvers.options['show_progress'] = False
 #solvers.options['maxiters'] = 10
-#solvers.options['reltol'] = 1e-3
-#solvers.options['abstol'] = 1e-3
-#solvers.options['feastol'] = 1e-3
+#solvers.options['reltol'] = 1e-1
+#solvers.options['abstol'] = 1e-1
+#solvers.options['feastol'] = 1e-1
 
 def policy(G, R0, L, d, u_next, gamma):
 
@@ -228,9 +229,9 @@ def policy(G, R0, L, d, u_next, gamma):
     Aineq= sparse.vstack([Aineq_r1, Aineq_r2, Aineq_r3, Aineq_r4, Aineq_r5, Aineq_r6])
     bineq= sparse.vstack([d,        z_n_1,     z_nA_1,     z_mn_1,     z_mm_1,     z_m_1])
 
-#    Aeq= matrix(Aeq)
+#    Aeq= matrix(Aeq.toarray())
 #    beq= matrix(beq)
-#    Aineq= matrix(Aineq)
+#    Aineq= matrix(Aineq.toarray())
 #    bineq= matrix(bineq)
 #    c= matrix(c)
     
@@ -246,13 +247,20 @@ def policy(G, R0, L, d, u_next, gamma):
 #    Aineq = Aineq.toarray()
 #    bineq = bineq.toarray()
 #    c = c.toarray()[:,0] 
+#
+#    sol = linprog(c,Aineq,bineq,Aeq,beq)
+#    var = np.zeros((len(sol['x']), 1))
+#    var[:,0] = sol['x']
+#    optval = sol['fun']
 
     # call solver
     sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'None')
-#    sol = glpk.lp(c,Aineq,bineq,Aeq,beq)
-#    var= np.array(sol['x'])
     var = sparse.lil_matrix(sol['x'])
     optval=np.array(sol['primal objective'])
+#    print("y: ", var[n*A + n*n + m*n +m*m +n:n*A + n*n + m*n +m*m +n + m].toarray())
+#    print("z: ", var[-1].toarray()) 
+#    print("solution: ", sol)
+#    print("optval: ", optval)
 
 #    temp_q =var[0:n*A,:]
 #    Q=temp_q.reshape(n,A)
@@ -275,10 +283,3 @@ def policy(G, R0, L, d, u_next, gamma):
 
     # this might not be efficient, but save for now
     return U.toarray(), Q.toarray(), M.toarray(), optval
-
-
-
-
-
-
-

@@ -80,7 +80,7 @@ def mdp(G, R, RT, L, d, x0, gamma):
 
         bf_x=MC.mc_x(x0,bf_M)
 
-        if LA.norm(bf_x-temp_x,np.inf) < 1e-1:
+        if LA.norm(bf_x-temp_x,np.inf) < 1e-5:
             break
 
         i=i+1
