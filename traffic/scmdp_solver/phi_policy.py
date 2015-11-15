@@ -7,7 +7,7 @@
 # discount factor gamma(1,1)
 
 import numpy as np
-from cvxopt import spmatrix, matrix, solvers, glpk
+from cvxopt import spmatrix, matrix, solvers
 from scipy import sparse
 import cvxtool
 #from scipy.optimize import linprog
