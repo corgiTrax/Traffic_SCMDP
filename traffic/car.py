@@ -58,7 +58,12 @@ class Car:
             elif next_pos[COL] - self.pos[COL] == 1: act = RIGHT
             self.move(act)
         # print(path)
-            
+    
+    def scmdpbf_act(self, scmdp_selector, episode, state_dict):
+        state_vec = [self.pos[ROW], self.pos[COL], self.dest[ROW], self.dest[COL], self.car_type]
+        state =  state_dict.get_num(state_vec)
+        self.move(scmdp_selector.choose_act(state,episode))
+
     def print_status(self):
         print("{:<6}".format(self.identity)),
         print("({:>2}, {:<2})".format(self.pos[ROW], self.pos[COL])), 
