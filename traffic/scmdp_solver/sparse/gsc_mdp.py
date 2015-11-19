@@ -85,10 +85,10 @@ def mdp(G, R, RT, L, d, x0, gamma):
 
         i=i+1
 
-    print("phi_u: ")
-    print(phi_U)
-    print("bf_u: ")
-    print(bf_U)
+#    print("phi_u: ")
+#    print(phi_U)
+#    print("bf_u: ")
+#    print(bf_U)
     # print("M shape", np.shape(phi_M))
 #    print("phiM: ", phi_M)
     return phi_Q, phi_x, bf_Q, bf_x

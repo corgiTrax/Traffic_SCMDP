@@ -8,11 +8,7 @@ COL = 1
 #planning horizon
 NUM_EPISODE = 10
 
-<<<<<<< HEAD
 NUM_CAR = 10
-=======
-NUM_CAR = 2
->>>>>>> 7bfd812623bc951ca8fd52214450872a5db6de11
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
@@ -34,8 +30,8 @@ NUM_BLK_BTW = 1
 DEF_TRAFFIC = 0
 # Map
 CAP_MAX = NUM_CAR/2 * CAP_SMALL + NUM_CAR/2 * CAP_BIG
-CAP_HZ_ROAD = [10, 10]
-CAP_VT_ROAD = [10, 10]
+CAP_HZ_ROAD = [4, 4]
+CAP_VT_ROAD = [4, 4]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 # start and destination positions

@@ -14,10 +14,18 @@ from scipy.optimize import linprog
 
 #solvers.options["msg_lev"] = "GLP_MSG_OFF"
 #solvers.options['show_progress'] = False
-#solvers.options['maxiters'] = 10
-#solvers.options['reltol'] = 1e-1
-#solvers.options['abstol'] = 1e-1
+#solvers.options['maxiters'] = 1000
+#solvers.options['reltol'] = 1e-9
+#solvers.options['abstol'] = 1e-10
 #solvers.options['feastol'] = 1e-1
+
+import mosek
+solvers.options['mosek'] = {mosek.iparam.log: 0}
+#solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.intpnt}
+#solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.dual_simplex}
+solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.primal_dual_simplex}
+#solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.primal_simplex}
+#solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.nonconvex}
 
 def policy(G, R0, L, d, u_next, gamma):
 
@@ -255,7 +263,7 @@ def policy(G, R0, L, d, u_next, gamma):
 #    print(optval)
 
 # call solver
-    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'glpk')
+    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'mosek')
     var = sparse.lil_matrix(sol['x'])
     optval=np.array(sol['primal objective'])
     print(optval)
@@ -282,6 +290,5 @@ def policy(G, R0, L, d, u_next, gamma):
                 M[i,j]=M[i,j]+G[k,i,j]*Q[j,k]
    
     U = sparse.lil_matrix(var[n * A + (n**2 + m**2 + m*n):n*A + (n**2 + m**2 + m*n) +n])
-
     # this might not be efficient, but save for now
     return U.toarray(), Q.toarray(), M.toarray(), optval
