@@ -11,6 +11,9 @@ from cvxopt import spmatrix, matrix, solvers
 from scipy import sparse
 import cvxtool
 #from scipy.optimize import linprog
+import mosek
+solvers.options['mosek'] = {mosek.iparam.log: 0}
+solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.intpnt}
 
 #solvers.options['show_progress'] = False
 #solvers.options['maxiters'] = 10
@@ -248,7 +251,7 @@ def policy(G, R0, L, d, u_next, gamma):
 #    c = c.toarray()[:,0] 
 
     # call solver
-    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'glpk')
+    sol=solvers.lp(c,Aineq,bineq,Aeq,beq, solver = 'mosek')
 #    sol = glpk.lp(c,Aineq,bineq,Aeq,beq)
 #    var= np.array(sol['x'])
     var = sparse.lil_matrix(sol['x'])

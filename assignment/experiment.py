@@ -190,7 +190,7 @@ class Experiment:
 
 def main():
     for i in range(0, len(ALGS)):
-        for j in range(1): # repeat 20 times
+        for j in range(5): # repeat 20 times
             new_exp = Experiment(num_agent = NUM_AGENT, alg = ALGS[i],\
             trans_suc_rate = TRANS_SUC_RATE,\
             num_episode = NUM_EPISODE, num_state = NUM_STATE,\

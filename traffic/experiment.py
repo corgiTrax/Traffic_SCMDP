@@ -45,7 +45,7 @@ class Experiment:
 
     def run(self):
         self.data_file = open(self.data_file_name, 'w')
-        for episode in range(NUM_EPISODE):
+        for episode in range(NUM_EPISODE - 1): # note this -1
             # visualization
             if self.vis:
                 #print("==========================================================")

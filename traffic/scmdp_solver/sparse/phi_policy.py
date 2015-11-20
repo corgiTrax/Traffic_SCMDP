@@ -21,9 +21,9 @@ from scipy.optimize import linprog
 
 import mosek
 solvers.options['mosek'] = {mosek.iparam.log: 0}
-#solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.intpnt}
+solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.intpnt}
 #solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.dual_simplex}
-solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.primal_dual_simplex}
+#solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.primal_dual_simplex}
 #solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.primal_simplex}
 #solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.nonconvex}
 
@@ -235,7 +235,7 @@ def policy(G, R0, L, d, u_next, gamma):
     c= sparse.vstack([z_nA_1,       z_nn_1,      z_mn_1,     z_mm_1,     z_n_1,     d,        z_n_1,      z_m_1,      -np.ones((1,1))])
 
     Aineq= sparse.vstack([Aineq_r1, Aineq_r2, Aineq_r3, Aineq_r4, Aineq_r5, Aineq_r6])
-    bineq= sparse.vstack([d,        z_n_1,     z_nA_1,     z_mn_1,     z_mm_1,     z_m_1])
+    bineq= sparse.vstack([0.85 * d,        z_n_1,     z_nA_1,     z_mn_1,     z_mm_1,     z_m_1])
 
 #    Aeq= matrix(Aeq.toarray())
 #    beq= matrix(beq)

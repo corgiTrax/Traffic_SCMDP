@@ -192,11 +192,11 @@ class World:
                         block.setFill("pink")
                     block.draw(self.window)
                     cap_bound = cg.Text(cg.Point((j+0.25) * CELL_SIZE, (i+0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
-                    cap_bound.setSize(9)
+                    cap_bound.setSize(15)
                     cap_bound.setFill("red")
                     cap_bound.draw(self.window)
                     cap_cur = cg.Text(cg.Point((j+0.75) * CELL_SIZE, (i+0.75) * CELL_SIZE),str(self.world_map[i][j].cap_cur))
-                    cap_cur.setSize(10)
+                    cap_cur.setSize(15)
                     cap_cur.setFill("black")
                     cap_cur.draw(self.window)
 

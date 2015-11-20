@@ -17,6 +17,9 @@ import cvxtool
 
 solvers.options["msg_lev"] = "GLP_MSG_OFF"
 solvers.options['show_progress'] = False
+import mosek
+solvers.options['mosek'] = {mosek.iparam.log: 0}
+solvers.options['mosek'] = {mosek.iparam.optimizer: mosek.optimizertype.intpnt}
 
 def policy(g, rt, L, d, x, u_next, u_ref, opt_ref,  gamma):
     # add a small constant to resolve numerical issue

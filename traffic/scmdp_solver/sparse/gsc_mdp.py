@@ -66,7 +66,7 @@ def mdp(G, R, RT, L, d, x0, gamma):
     phi_x=MC.mc_x(x0,phi_M)
     print("Phi_opt", phi_opt)
 
-    TO=100;
+    TO=10;
     i=0;
 
     bf_x=cp.deepcopy(phi_x)
@@ -80,15 +80,15 @@ def mdp(G, R, RT, L, d, x0, gamma):
 
         bf_x=MC.mc_x(x0,bf_M)
 
-        if LA.norm(bf_x-temp_x,np.inf) < 1e-5:
+        if LA.norm(bf_x-temp_x,np.inf) < 1e-2:
             break
 
         i=i+1
 
-#    print("phi_u: ")
-#    print(phi_U)
-#    print("bf_u: ")
-#    print(bf_U)
+    print("phi_u: ")
+    print(phi_U)
+    print("bf_u: ")
+    print(bf_U)
     # print("M shape", np.shape(phi_M))
 #    print("phiM: ", phi_M)
     return phi_Q, phi_x, bf_Q, bf_x
