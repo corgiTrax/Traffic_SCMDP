@@ -1,6 +1,6 @@
 import numpy as np
 from cvxopt import matrix, solvers
-import scmdp_solver.sparse.gsc_mdp as GSC
+import solver.sparse.gsc_mdp as GSC
 import copy as cp
 import roulette
 from tempfile import TemporaryFile
@@ -61,7 +61,7 @@ class SCMDP:
         # initial distribution of the agents 
         self.construct_x0()
         # discount factor
-        self.gamma = 0.2
+        self.gamma = 0.99
         print("Time: ", time.time() - start_time)
 
         # policy matrix
@@ -88,8 +88,14 @@ class SCMDP:
                         and state_i[2] == state_j[2] and state_i[3] == state_j[3] and state_i[4] == state_j[4]:
                             G_act[i][j] = 1
                 self.G[act,:,:] = cp.deepcopy(G_act)
-        #print_matrix(self.G[DOWN,:,:])
-        #print(np.shape(self.G))
+
+        if SOLVER == CVXPY:
+            self.G_cvxpy = cp.deepcopy(self.G[0,:,:])
+            for act in range(1, self.A):
+                self.G_cvxpy = np.hstack((self.G_cvxpy, self.G[act,:,:]))
+
+        #print_matrix(self.G_cvxpy[:,48:64] - self.G[3,:,:])
+        #print(np.shape(self.G_cvxpy))
 
     def construct_RT(self):
         ''' n x 1'''
@@ -151,14 +157,17 @@ class SCMDP:
 
     def solve(self):
 #        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
-        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+        if SOLVER == CVXOPT:
+            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxopt(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+        else:
+            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxpy(self.G_cvxpy, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("scmdp policy solved")
-#        print("phi_Q", self.phi_Q)
+        print("phi_Q", self.phi_Q)
 #        print("bf_Q", self.bf_Q)
         print("phix: ")
         print(np.dot(self.L, self.phi_x))
-        print("bfx: ")
-        print(np.dot(self.L, self.bf_x))
+#        print("bfx: ")
+#        print(np.dot(self.L, self.bf_x))
 #        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
 #        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
 #        res_bf = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, bf_x)
