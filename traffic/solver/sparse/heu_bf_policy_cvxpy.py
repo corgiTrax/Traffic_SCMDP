@@ -2,7 +2,7 @@ from cvxpy import *
 #import cvxpy as cvx
 import numpy as np
 
-def policy(G, R, L, d, U_next, gamma):
+def policy(G, R, L, d, x, U_next, U_ref, opt_ref, gamma):
     [n,A]=R.shape
     [m,temp]=d.shape
 
@@ -20,9 +20,10 @@ def policy(G, R, L, d, U_next, gamma):
 
 
     # Create two constraints.
-    constraints = [-M + mul_elemwise(G,(np.ones((n, 1)) * vec(Q).T)) * Kr == 0,
+    constraints = [(d.T) * y - z <= opt_ref,
+                   -M + mul_elemwise(G,(np.ones((n, 1)) * vec(Q).T)) * Kr == 0,
                    -r + mul_elemwise(R,Q) * np.ones((A, 1)) == 0,
-                   -L.T * y + z * np.ones((n, 1)) - U <= 0,
+                   -L.T * y + z * np.ones((n, 1)) - U_ref <= 0,
                    -U + r + gamma * M.T * U_next == 0,
                    -K * L + L * M + S + xi * np.ones((1, n)) == 0,
                    xi + d - K * d >= 0,
@@ -34,10 +35,10 @@ def policy(G, R, L, d, U_next, gamma):
                    ]
 
     # Form objective.
-    obj = Minimize((d.T)*y-z)
+    obj = Minimize(-(x.T) * U)
 
     # Form and solve problem.
     prob = Problem(obj, constraints)
-    prob.solve(solver = MOSEK)
+    prob.solve()
 
-    return U.value, Q.value, M.value, ((d.T) * y - z).value
+    return U.value, Q.value, M.value

@@ -18,7 +18,7 @@ import heu_bf_policy as bf
 import mc_x as MC
 
 import phi_policy_cvxpy as phipy
-
+import heu_bf_policy_cvxpy as bfpy 
 def mdp_cvxopt(G, R, RT, L, d, x0, gamma):
     [T, n, A] = R.shape
     T = T+1
@@ -143,29 +143,29 @@ def mdp_cvxpy(G, R, RT, L, d, x0, gamma):
     phi_x=MC.mc_x(x0,phi_M)
     print("Phi_opt", phi_opt)
 
-    TO=10;
-    i=0;
+    TO = 10;
+    i = 0;
 
     bf_x=cp.deepcopy(phi_x)
 
     while i <= TO:
-        # print(i)
+        print("Current step of solving bf: ",i)
         temp_x=cp.deepcopy(bf_x)
 
         for j in range(T-2,-1,-1):
-            [bf_U[:,[j]],bf_Q[j,:,:],bf_M[j,:,:]]=bf.policy(G, R[j,:,:], L, d, bf_x[:,[j]], bf_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
+            [bf_U[:,[j]],bf_Q[j,:,:],bf_M[j,:,:]]=bfpy.policy(G, R[j,:,:], L, d, bf_x[:,[j]], bf_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
 
         bf_x=MC.mc_x(x0,bf_M)
 
-        if LA.norm(bf_x-temp_x,np.inf) < 1e-2:
+        if LA.norm(bf_x-temp_x,np.inf) < 1e-3:
             break
 
         i=i+1
 
-    print("phi_u: ")
-    print(phi_U)
-    print("bf_u: ")
-    print(bf_U)
+#    print("phi_u: ")
+#    print(phi_U)
+#    print("bf_u: ")
+#    print(bf_U)
     # print("M shape", np.shape(phi_M))
 #    print("phiM: ", phi_M)
     return phi_Q, phi_x, bf_Q, bf_x

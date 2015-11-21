@@ -52,6 +52,7 @@ class Experiment:
                 #print("{:<6} {:<6} {:<6}".format("CarID", "Position", "Destination"))
                 #for car in self.cars:
                 #    car.print_status()
+                print(episode)
                 self.test_world.draw()
                 self.test_world.window.getMouse()
             
@@ -65,7 +66,6 @@ class Experiment:
                     if self.alg == SCMDPBF:
                         car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
 
-            print(self.test_world.get_map())
 new_exp = Experiment(alg = SCMDPBF, data_file = "data/temp")
 new_exp.run()
 
