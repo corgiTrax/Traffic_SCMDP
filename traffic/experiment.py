@@ -52,20 +52,25 @@ class Experiment:
                 #print("{:<6} {:<6} {:<6}".format("CarID", "Position", "Destination"))
                 #for car in self.cars:
                 #    car.print_status()
-                print(episode)
+                print("Current episode: "), ;print(episode)
                 self.test_world.draw()
                 self.test_world.window.getMouse()
             
+            car_arrived = 0
             # cars move sequentially
             for car in self.cars:
-                if not(car.arrived()):
+                if True: #not(car.arrived()):
                     if self.alg == STP:           
                         car.greedy_act() 
                     if self.alg == ASTAR:
                         car.astar_act()
                     if self.alg == SCMDPBF:
                         car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
+                else:
+                    car_arrived += 1
 
+            print("Car Arrived at Destinations:"), ;print(car_arrived)
+                    
 new_exp = Experiment(alg = SCMDPBF, data_file = "data/temp")
 new_exp.run()
 

@@ -166,7 +166,7 @@ class Experiment:
                 self.total_reward += patch.count_reward()
             
             # print experiment status of current episode
-            self.print_patch_status()
+            # self.print_patch_status()
             self.record(episode)
 
             # Drop agents and add to home (except home)
@@ -190,7 +190,7 @@ class Experiment:
 
 def main():
     for i in range(0, len(ALGS)):
-        for j in range(5): # repeat 20 times
+        for j in range(NUM_EXP): # repeat 20 times
             new_exp = Experiment(num_agent = NUM_AGENT, alg = ALGS[i],\
             trans_suc_rate = TRANS_SUC_RATE,\
             num_episode = NUM_EPISODE, num_state = NUM_STATE,\

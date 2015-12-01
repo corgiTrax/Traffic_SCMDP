@@ -8,24 +8,24 @@ class Block:
         self.block_type = block_type
         # capacity upper bound
         self.cap_bound = capacity 
-        # store the vehicles in this block
-        self.cap_cur = DEF_TRAFFIC
-    
-    def rm_car(self):
-        self.cap_cur -= 1
-
-    def add_car(self):
-        self.cap_cur += 1
+        # store the vehicles in this block; a list contains cars with diff. destinations
+        self.cap_cur = [DEF_TRAFFIC for i in range(len(DESTINATION))]
+        
+    def rm_car(self, dest):
+        self.cap_cur[DESTINATION.index(dest)] -= 1
+        
+    def add_car(self, dest):
+        self.cap_cur[DESTINATION.index(dest)] += 1
 
     def congest_prob(self):
         '''based on the current capacity and bound, return the probability of congestion'''
         # CONGEST_FACTOR = 1 if we want congest_prob to be 1.0 when current traffic is 2 times than capacity
         # increase this value to make penalty more harsh for violating upper bound 
-        congest_prob = min(CONGEST_FACTOR * (self.cap_cur - self.cap_bound) / (self.cap_bound), 1)
+        congest_prob = min(CONGEST_FACTOR * (sum(self.cap_cur) - self.cap_bound) / (self.cap_bound), 1)
 
     def congest(self):
         '''return true if a car can successfuly move into the block, based on current traffic capacity'''
-        if self.cap_cur < self.cap_bound: return False
+        if sum(self.cap_cur) < self.cap_bound: return False
         else: return True
         # take this out, for now simply cannot enter congestion state
         #else:
@@ -166,8 +166,8 @@ class World:
 
     def draw(self, isNew = False):
         if isNew:
-            width_ = (self.columns + 2) * CELL_SIZE
-            height_ = (self.rows + 2) * CELL_SIZE
+            width_ = (self.columns + 1) * CELL_SIZE
+            height_ = (self.rows + 1) * CELL_SIZE
             # Draw map cells:
             self.window = cg.GraphWin(title = "City Map", width = width_, height = height_)
             # Draw position labels
@@ -186,19 +186,24 @@ class World:
                 if self.world_map[i][j].block_type != OFFROAD:
                     block = cg.Rectangle(cg.Point(j * CELL_SIZE, i * CELL_SIZE), cg.Point((j + 1) * CELL_SIZE, (i + 1) * CELL_SIZE))
                     # normal traffic situation
-                    if self.world_map[i][j].cap_bound > self.world_map[i][j].cap_cur: 
-                        block.setFill("lightblue")
+                    if self.world_map[i][j].cap_bound > sum(self.world_map[i][j].cap_cur): 
+                        block.setFill("black")
                     else: # traffic jam
-                        block.setFill("pink")
+                        block.setFill("white")
                     block.draw(self.window)
-                    cap_bound = cg.Text(cg.Point((j+0.25) * CELL_SIZE, (i+0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
-                    cap_bound.setSize(15)
+                    cap_bound = cg.Text(cg.Point((j + 0.25) * CELL_SIZE, (i + 0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
+                    cap_bound.setSize(12)
                     cap_bound.setFill("red")
                     cap_bound.draw(self.window)
-                    cap_cur = cg.Text(cg.Point((j+0.75) * CELL_SIZE, (i+0.75) * CELL_SIZE),str(self.world_map[i][j].cap_cur))
-                    cap_cur.setSize(15)
-                    cap_cur.setFill("black")
-                    cap_cur.draw(self.window)
+                    # draw car count for each set of cars
+                    #TBD note this print out only works for 4 or less destinations
+                    offset = 0.15
+                    offsets = [[offset, offset], [-offset, offset], [offset, -offset], [-offset, -offset]]
+                    for k in range(len(DESTINATION)):
+                        cap_cur = cg.Text(cg.Point((j + 0.625 + offsets[k][0]) * CELL_SIZE, (i + 0.625 + offsets[k][1]) * CELL_SIZE),str(self.world_map[i][j].cap_cur[k]))
+                        cap_cur.setSize(12)
+                        cap_cur.setFill(CAR_COLOR[k])
+                        cap_cur.draw(self.window)
 
 if __name__ == '__main__':
     test_world = World()

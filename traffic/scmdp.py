@@ -88,11 +88,11 @@ class SCMDP:
                         and state_i[2] == state_j[2] and state_i[3] == state_j[3] and state_i[4] == state_j[4]:
                             G_act[i][j] = 1
                 self.G[act,:,:] = cp.deepcopy(G_act)
-
-        if SOLVER == CVXPY:
-            self.G_cvxpy = cp.deepcopy(self.G[0,:,:])
-            for act in range(1, self.A):
-                self.G_cvxpy = np.hstack((self.G_cvxpy, self.G[act,:,:]))
+#        # no need to do this: done in solver
+#        if SOLVER == CVXPY:
+#            self.G_cvxpy = cp.deepcopy(self.G[0,:,:])
+#            for act in range(1, self.A):
+#                self.G_cvxpy = np.hstack((self.G_cvxpy, self.G[act,:,:]))
 
         #print_matrix(self.G_cvxpy[:,48:64] - self.G[3,:,:])
         #print(np.shape(self.G_cvxpy))
@@ -115,6 +115,10 @@ class SCMDP:
             R0[:,a] = cp.deepcopy(self.RT[:,0])
         for t in range(self.T-1):
             self.R[t,:,:] = cp.deepcopy(R0)
+        for i in range(self.T - 1):
+            for j in range(self.n):
+                for k in range(self.A):
+                    if self.R[i,j,k] == 0: self.R[i,j,k] = COST
         # print_matrix(self.R[-2])
 
     def construct_L(self):
@@ -139,7 +143,7 @@ class SCMDP:
                 if self.world.world_map[i][j].block_type != OFFROAD:
                     self.d[state_count, 0] = 1.0 * self.world.world_map[i][j].cap_bound / NUM_CAR
                     state_count += 1
-        # print_m(self.d)
+        # print_matrix(self.d)
 
     def construct_x0(self):
         ''' n x 1, assume cars are distributed equally in start '''
@@ -153,21 +157,21 @@ class SCMDP:
                 des_pos = [state_vec[2], state_vec[3]]
                 if state.same_loc(DESTINATION[START.index(start_pos)], des_pos):
                     self.x0[i, 0] = INIT_DENSITY_CORNER
-        # print_m(self.x0)
+        # print_matrix(self.x0)
 
     def solve(self):
 #        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         if SOLVER == CVXOPT:
             [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxopt(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         else:
-            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxpy(self.G_cvxpy, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
-        print("scmdp policy solved")
+            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+        print("Scmdp policy solved")
 #        print("phi_Q", self.phi_Q)
-#        print("bf_Q", self.bf_Q)
-#        print("phix: ")
-        print(np.dot(self.L, self.phi_x))
-#        print("bfx: ")
-        print(np.dot(self.L, self.bf_x))
+        print("bf_Q", self.bf_Q)
+        print("L: "); print(self.L)
+        print("bf_x: "); print(self.bf_x)
+        print("L*phix: ");print(np.dot(self.L, self.phi_x))
+        print("L*bfx: ");print(np.dot(self.L, self.bf_x))
 #        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
 #        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
 #        res_bf = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, bf_x)
@@ -219,4 +223,4 @@ if __name__ == "__main__":
     scmdp_solver = SCMDP(world_ = test_world, sdic_ = state_dict, T = NUM_EPISODE, m = test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
     scmdp_solver.solve()
     scmdp_solver.save_to_file()
-    print(time.time() - start_time)
+    print("Total computation time: "),;print(time.time() - start_time)

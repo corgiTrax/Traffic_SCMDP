@@ -95,10 +95,15 @@ def mdp_cvxopt(G, R, RT, L, d, x0, gamma):
     return phi_Q, phi_x, bf_Q, bf_x
 #    return un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x
 
-def mdp_cvxpy(G, R, RT, L, d, x0, gamma):
+def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     [T, n, A] = R.shape
     T = T+1
     # prelocating
+
+    # if using cvxpy, G matrix is 2D instead of 3D
+    G = cp.deepcopy(G_3D[0,:,:])
+    for act in range(1, A):
+        G = np.hstack((G, G_3D[act,:,:]))
 
     # unconstrained  policy
 #    un_U=np.zeros((n, T))
@@ -143,7 +148,7 @@ def mdp_cvxpy(G, R, RT, L, d, x0, gamma):
     phi_x=MC.mc_x(x0,phi_M)
     print("Phi_opt", phi_opt)
 
-    TO = 10;
+    TO = 30;
     i = 0;
 
     bf_x=cp.deepcopy(phi_x)
@@ -157,11 +162,11 @@ def mdp_cvxpy(G, R, RT, L, d, x0, gamma):
 
         bf_x=MC.mc_x(x0,bf_M)
 
-        if LA.norm(bf_x-temp_x,np.inf) < 1e-3:
+        if LA.norm(bf_x-temp_x,np.inf) < 1e-5:
             break
 
         i=i+1
-
+    print("bf_M: "); print(bf_M)
 #    print("phi_u: ")
 #    print(phi_U)
 #    print("bf_u: ")
