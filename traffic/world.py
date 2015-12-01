@@ -11,11 +11,11 @@ class Block:
         # store the vehicles in this block; a list contains cars with diff. destinations
         self.cap_cur = [DEF_TRAFFIC for i in range(len(DESTINATION))]
         
-    def rm_car(self, dest):
-        self.cap_cur[DESTINATION.index(dest)] -= 1
+    def rm_car(self, dest, cap):
+        self.cap_cur[DESTINATION.index(dest)] -= cap
         
-    def add_car(self, dest):
-        self.cap_cur[DESTINATION.index(dest)] += 1
+    def add_car(self, dest, cap):
+        self.cap_cur[DESTINATION.index(dest)] += cap
 
     def congest_prob(self):
         '''based on the current capacity and bound, return the probability of congestion'''
@@ -97,7 +97,9 @@ class World:
         # check that the agent cannot move offroad
         if self.world_map[pos[ROW]][pos[COL]].block_type == OFFROAD: return False
         # check the traffic
-        return not(self.world_map[pos[ROW]][pos[COL]].congest())
+        # TBD: take out congestion now, cars can go freely
+        return True
+        # return not(self.world_map[pos[ROW]][pos[COL]].congest())
 
     def move_consq(self, agent_pos, action):
         '''return the consequence of taking an action in start position'''
@@ -189,11 +191,11 @@ class World:
                     if self.world_map[i][j].cap_bound > sum(self.world_map[i][j].cap_cur): 
                         block.setFill("black")
                     else: # traffic jam
-                        block.setFill("white")
+                        block.setFill("pink")
                     block.draw(self.window)
                     cap_bound = cg.Text(cg.Point((j + 0.25) * CELL_SIZE, (i + 0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
                     cap_bound.setSize(12)
-                    cap_bound.setFill("red")
+                    cap_bound.setFill("white")
                     cap_bound.draw(self.window)
                     # draw car count for each set of cars
                     #TBD note this print out only works for 4 or less destinations

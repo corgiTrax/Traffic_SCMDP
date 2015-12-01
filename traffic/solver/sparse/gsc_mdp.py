@@ -166,7 +166,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
             break
 
         i=i+1
-    print("bf_M: "); print(bf_M)
+#    print("bf_M: "); print(bf_M)
 #    print("phi_u: ")
 #    print(phi_U)
 #    print("bf_u: ")

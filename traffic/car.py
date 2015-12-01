@@ -13,7 +13,7 @@ class Car:
         # the world this agent lives in
         self.world = world
         # update road block
-        self.world.world_map[self.pos[ROW]][self.pos[COL]].add_car(self.dest)
+        self.world.world_map[self.pos[ROW]][self.pos[COL]].add_car(self.dest, self.cap)
     
     def arrived(self):
         '''return true if car is already at destination'''
@@ -21,7 +21,7 @@ class Car:
 
     def move(self, action):
         if (self.world.success_move(self.pos, action)):
-            self.world.world_map[self.pos[ROW]][self.pos[COL]].rm_car(self.dest)
+            self.world.world_map[self.pos[ROW]][self.pos[COL]].rm_car(self.dest, self.cap)
             if (action == UP):
                 self.pos[ROW] -=1
             if (action == DOWN): 
@@ -31,7 +31,7 @@ class Car:
             if (action == RIGHT):
                 self.pos[COL] +=1
             # if action is STAY nothing happens
-            self.world.world_map[self.pos[ROW]][self.pos[COL]].add_car(self.dest)
+            self.world.world_map[self.pos[ROW]][self.pos[COL]].add_car(self.dest, self.cap)
     
     def greedy_act(self):
         '''choose the action and move; shortest path with random tie-break'''

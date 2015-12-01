@@ -54,7 +54,7 @@ class Experiment:
                 #    car.print_status()
                 print("Current episode: "), ;print(episode)
                 self.test_world.draw()
-                self.test_world.window.getMouse()
+                if MOUSE: self.test_world.window.getMouse()
             
             car_arrived = 0
             # cars move sequentially
@@ -66,12 +66,12 @@ class Experiment:
                         car.astar_act()
                     if self.alg == SCMDPBF:
                         car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
-                else:
-                    car_arrived += 1
+                # else:
+                    if car.arrived(): car_arrived += 1
 
             print("Car Arrived at Destinations:"), ;print(car_arrived)
                     
-new_exp = Experiment(alg = SCMDPBF, data_file = "data/temp")
+new_exp = Experiment(alg = ALG, data_file = "data/temp")
 new_exp.run()
 
 raw_input("Please Press Enter to Exit")

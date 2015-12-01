@@ -24,12 +24,13 @@ def policy(G, R, L, d, U_next, gamma):
                    -r + mul_elemwise(R,Q) * np.ones((A, 1)) == 0,
                    -L.T * y + z * np.ones((n, 1)) - U <= 0,
                    -U + r + gamma * M.T * U_next == 0,
-                   -K * L + L * M + S + xi * np.ones((1, n)) == 0,
+                   -K * L + L * M + xi * np.ones((1, n)) <= 0,
+                   #-K * L + L * M + S + xi * np.ones((1, n)) == 0,
                    xi + d - K * d >= 0,
                    Q * np.ones((A, 1)) - np.ones((n, 1)) == 0,
                    Q >= np.zeros((n, A)),
                    y >= np.zeros((m, 1)),
-                   S >= np.zeros((m, n)),
+                   # S >= np.zeros((m, n)),
                    K >= np.zeros((m, m)),
                    ]
 

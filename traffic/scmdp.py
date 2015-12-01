@@ -61,7 +61,7 @@ class SCMDP:
         # initial distribution of the agents 
         self.construct_x0()
         # discount factor
-        self.gamma = 0.99
+        self.gamma = GAMMA
         print("Time: ", time.time() - start_time)
 
         # policy matrix
@@ -143,7 +143,7 @@ class SCMDP:
                 if self.world.world_map[i][j].block_type != OFFROAD:
                     self.d[state_count, 0] = 1.0 * self.world.world_map[i][j].cap_bound / NUM_CAR
                     state_count += 1
-        # print_matrix(self.d)
+        print_matrix(self.d)
 
     def construct_x0(self):
         ''' n x 1, assume cars are distributed equally in start '''
@@ -157,7 +157,7 @@ class SCMDP:
                 des_pos = [state_vec[2], state_vec[3]]
                 if state.same_loc(DESTINATION[START.index(start_pos)], des_pos):
                     self.x0[i, 0] = INIT_DENSITY_CORNER
-        # print_matrix(self.x0)
+ #       print_matrix(self.x0)
 
     def solve(self):
 #        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
@@ -167,8 +167,8 @@ class SCMDP:
             [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("Scmdp policy solved")
 #        print("phi_Q", self.phi_Q)
-        print("bf_Q", self.bf_Q)
-        print("L: "); print(self.L)
+#        print("bf_Q", self.bf_Q)
+#        print("L: "); print(self.L)
         print("bf_x: "); print(self.bf_x)
         print("L*phix: ");print(np.dot(self.L, self.phi_x))
         print("L*bfx: ");print(np.dot(self.L, self.bf_x))
