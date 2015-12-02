@@ -94,8 +94,8 @@ class SCMDP:
 #            for act in range(1, self.A):
 #                self.G_cvxpy = np.hstack((self.G_cvxpy, self.G[act,:,:]))
 
-        #print_matrix(self.G_cvxpy[:,48:64] - self.G[3,:,:])
-        #print(np.shape(self.G_cvxpy))
+#        print_matrix(self.G[0,:,:])
+#        print(np.shape(self.G))
 
     def construct_RT(self):
         ''' n x 1'''
@@ -105,7 +105,9 @@ class SCMDP:
             # if the current position is equal to destination
             if state.same_loc([state_vec[0], state_vec[1]], [state_vec[2], state_vec[3]]):
                 self.RT[i,0] = REWARD
-        # print_matrix(self.RT)
+            else:
+                self.RT[i,0] = COST
+#        print_matrix(self.RT)
 
     def construct_R(self):
         ''' (T-1) x n x A'''
@@ -115,11 +117,7 @@ class SCMDP:
             R0[:,a] = cp.deepcopy(self.RT[:,0])
         for t in range(self.T-1):
             self.R[t,:,:] = cp.deepcopy(R0)
-        for i in range(self.T - 1):
-            for j in range(self.n):
-                for k in range(self.A):
-                    if self.R[i,j,k] == 0: self.R[i,j,k] = COST
-        # print_matrix(self.R[-2])
+#        print_matrix(self.R[-1])
 
     def construct_L(self):
         ''' m x n'''
@@ -132,7 +130,7 @@ class SCMDP:
             self.L = np.append(self.L, I_SMALL, axis = 1)
         for i in range(len(DESTINATION)):
             self.L = np.append(self.L, I_BIG, axis = 1)
-        # print_m(self.L)
+        # print_matrix(self.L)
 
     def construct_d(self):
         ''' m x 1'''
@@ -143,7 +141,7 @@ class SCMDP:
                 if self.world.world_map[i][j].block_type != OFFROAD:
                     self.d[state_count, 0] = 1.0 * self.world.world_map[i][j].cap_bound / NUM_CAR
                     state_count += 1
-        print_matrix(self.d)
+        # print_matrix(self.d)
 
     def construct_x0(self):
         ''' n x 1, assume cars are distributed equally in start '''
@@ -157,7 +155,7 @@ class SCMDP:
                 des_pos = [state_vec[2], state_vec[3]]
                 if state.same_loc(DESTINATION[START.index(start_pos)], des_pos):
                     self.x0[i, 0] = INIT_DENSITY_CORNER
- #       print_matrix(self.x0)
+        # print_matrix(self.x0)
 
     def solve(self):
 #        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)

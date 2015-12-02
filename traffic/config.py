@@ -11,9 +11,9 @@ ROW = 0
 COL = 1
 
 #planning horizon
-NUM_EPISODE = 20
+NUM_EPISODE = 10
 
-NUM_CAR = 2000
+NUM_CAR = 1000
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
@@ -34,24 +34,24 @@ NUM_BLK_BTW = 1
 # The default car density
 DEF_TRAFFIC = 0
 # Map
-CAP_MAX = 10 * (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP_BIG)
-CAP_HZ_ROAD = [500, 500, 500]
-CAP_VT_ROAD = [500, 500, 500]
+CAP_MAX = 1 * (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP_BIG)
+CAP_HZ_ROAD = [1000, 1000]
+CAP_VT_ROAD = [1000, 1000]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
 # start and destination positions
 CAR_COLOR = ["red", "orange", "yellow", "green"]
-#START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
-#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
+START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
+DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
 #START= [[0,0], [0, WORLD_COLS - 1]]
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0]]
-START= [[0,0]]
-DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
+#START= [[0,0]]
+#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
-REWARD = 0
-COST = -10
+REWARD = 10
+COST = 0
 GAMMA = 0.99
 # initial density at each corner
 INIT_DENSITY_CORNER = 1.0 / (len(START) * len(CAR_TYPE))

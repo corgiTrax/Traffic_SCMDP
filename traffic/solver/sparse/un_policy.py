@@ -7,11 +7,12 @@
 # discount factor gamma(1,1)
 import numpy as np
 
-def policy(g, rt, u_next, gamma):
-    [A, temp,n]=g.shape
-    gg=np.zeros((n,n*A))
-    for i in range(A):
-        gg[:,i*n:i*n+n]=g[i,:,:]
+def policy(gg, rt, u_next, gamma):
+    [n, nA] = gg.shape
+#    gg=np.zeros((n,n*A))
+#    for i in range(A):
+#        gg[:,i*n:i*n+n]=g[i,:,:]
+    A = int(nA / n)
 
     qval=np.zeros((n,A))
     Q=np.zeros((n,A))
