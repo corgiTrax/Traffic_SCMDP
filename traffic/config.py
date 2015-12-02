@@ -13,7 +13,7 @@ COL = 1
 #planning horizon
 NUM_EPISODE = 10
 
-NUM_CAR = 1000
+NUM_CAR = 200
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
@@ -42,16 +42,16 @@ WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
 # start and destination positions
 CAR_COLOR = ["red", "orange", "yellow", "green"]
-START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
-DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
+#START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
+#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
 #START= [[0,0], [0, WORLD_COLS - 1]]
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0]]
-#START= [[0,0]]
-#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
+START= [[0,0]]
+DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
 REWARD = 10
-COST = 0
+COST = -10
 GAMMA = 0.99
 # initial density at each corner
 INIT_DENSITY_CORNER = 1.0 / (len(START) * len(CAR_TYPE))

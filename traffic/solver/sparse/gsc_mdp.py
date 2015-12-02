@@ -27,7 +27,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     # if using cvxpy, G matrix is 2D instead of 3D
     G = cp.deepcopy(G_3D[0,:,:])
     for act in range(1, A):
-        G = np.hstack((G, G_3D[act,:,:]))
+        G = np.hstack((G, cp.deepcopy(G_3D[act,:,:])))
 
     # unconstrained  policy
     un_U=np.zeros((n, T))
@@ -93,8 +93,8 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
 #    print("bf_M: "); print(bf_M)
 #    print("phi_u: ")
 #    print(phi_U)
-    print("bf_u: ")
-    print(bf_U)
+#    print("bf_u: ")
+#    print(bf_U)
     # print("M shape", np.shape(phi_M))
 #    print("phiM: ", phi_M)
     return phi_Q, phi_x, bf_Q, bf_x
