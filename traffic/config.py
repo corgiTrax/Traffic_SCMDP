@@ -11,9 +11,9 @@ ROW = 0
 COL = 1
 
 #planning horizon
-NUM_EPISODE = 70
+NUM_EPISODE = 100
 
-NUM_CAR = 4000
+NUM_CAR = 12000
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
@@ -50,7 +50,7 @@ DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
-REWARD = 2
+REWARD = 1
 COST = 0
 GAMMA = 0.99
 # calculate number of cars at each corner
