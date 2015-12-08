@@ -39,6 +39,6 @@ def policy(G, R, L, d, x, U_next, U_ref, opt_ref, gamma):
 
     # Form and solve problem.
     prob = Problem(obj, constraints)
-    prob.solve()
+    prob.solve(solver = MOSEK)
 
     return U.value, Q.value, M.value

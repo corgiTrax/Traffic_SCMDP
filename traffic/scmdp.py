@@ -12,7 +12,7 @@ import world
 import car
 import state
 
-np.set_printoptions(linewidth = 1000, precision = 3, suppress = True, threshold = 'nan')
+np.set_printoptions(linewidth = 1000, precision = 5, suppress = True, threshold = 'nan')
 
 def print_matrix(matrix):
     (row,col) = numpy.shape(matrix)
@@ -88,12 +88,6 @@ class SCMDP:
                         and state_i[2] == state_j[2] and state_i[3] == state_j[3] and state_i[4] == state_j[4]:
                             G_act[i][j] = 1
                 self.G[act,:,:] = cp.deepcopy(G_act)
-#        # no need to do this: done in solver
-#        if SOLVER == CVXPY:
-#            self.G_cvxpy = cp.deepcopy(self.G[0,:,:])
-#            for act in range(1, self.A):
-#                self.G_cvxpy = np.hstack((self.G_cvxpy, self.G[act,:,:]))
-
 #        print_matrix(self.G[0,:,:])
 #        print(np.shape(self.G))
 
@@ -130,7 +124,16 @@ class SCMDP:
             self.L = np.append(self.L, I_SMALL, axis = 1)
         for i in range(len(DESTINATION)):
             self.L = np.append(self.L, I_BIG, axis = 1)
-        # print_matrix(self.L)
+        # take out the capacity bounds for start end end locations
+        pos_count = 0; remove_count = 0
+        for i in range(self.world.rows):
+            for j in range(self.world.columns):
+                if self.world.world_map[i][j].block_type != OFFROAD:
+                    if [i,j] in START or [i,j] in DESTINATION:
+                        self.L = np.delete(self.L, (pos_count - remove_count), axis = 0)
+                        remove_count += 1
+                    pos_count += 1
+#        print_matrix(self.L)
 
     def construct_d(self):
         ''' m x 1'''
@@ -141,7 +144,16 @@ class SCMDP:
                 if self.world.world_map[i][j].block_type != OFFROAD:
                     self.d[state_count, 0] = 1.0 * self.world.world_map[i][j].cap_bound / NUM_CAR
                     state_count += 1
-        # print_matrix(self.d)
+        # take out the capacity bounds for start end end locations
+        pos_count = 0; remove_count = 0;
+        for i in range(self.world.rows):
+            for j in range(self.world.columns):
+                if self.world.world_map[i][j].block_type != OFFROAD:
+                    if [i,j] in START or [i,j] in DESTINATION:
+                        self.d = np.delete(self.d, (pos_count - remove_count), axis = 0)
+                        remove_count += 1
+                    pos_count += 1
+#        print_matrix(self.d)
 
     def construct_x0(self):
         ''' n x 1, assume cars are distributed equally in start '''
@@ -166,7 +178,6 @@ class SCMDP:
         print("Scmdp policy solved")
 #        print("phi_Q", self.phi_Q)
 #        print("bf_Q", self.bf_Q)
-#        print("L: "); print(self.L)
         print("bf_x: "); print(self.bf_x)
         print("L*phix: ");print(np.dot(self.L, self.phi_x))
         print("L*bfx: ");print(np.dot(self.L, self.bf_x))

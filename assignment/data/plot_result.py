@@ -101,7 +101,7 @@ if SHOW_REWARD:
     ax1.legend(handles, labels, loc = 'upper left')
 #    ax1.set_yscale('symlog', linthreshy = 10)#nonposy='clip')
 #    plt.xlim((-1,None))
-#    plt.ylim((-10,None))
+    plt.ylim((-1000,None))
     plt.show()
 
 

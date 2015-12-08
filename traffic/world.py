@@ -99,7 +99,7 @@ class World:
         # check the traffic
         # TBD: take out congestion now, cars can go freely
         return True
-        # return not(self.world_map[pos[ROW]][pos[COL]].congest())
+        #return not(self.world_map[pos[ROW]][pos[COL]].congest())
 
     def move_consq(self, agent_pos, action):
         '''return the consequence of taking an action in start position'''
@@ -193,10 +193,11 @@ class World:
                     else: # traffic jam
                         block.setFill("pink")
                     block.draw(self.window)
-                    cap_bound = cg.Text(cg.Point((j + 0.25) * CELL_SIZE, (i + 0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
-                    cap_bound.setSize(12)
-                    cap_bound.setFill("white")
-                    cap_bound.draw(self.window)
+                    if not([i,j] in START or [i,j] in DESTINATION):
+                        cap_bound = cg.Text(cg.Point((j + 0.25) * CELL_SIZE, (i + 0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
+                        cap_bound.setSize(12)
+                        cap_bound.setFill("white")
+                        cap_bound.draw(self.window)
                     # draw car count for each set of cars
                     #TBD note this print out only works for 4 or less destinations
                     offset = 0.15

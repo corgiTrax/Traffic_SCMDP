@@ -7,6 +7,7 @@ import world
 import car
 import scmdp
 import state
+import sys
 
 class Experiment:
     def __init__(self, alg, data_file, vis = True):
@@ -34,8 +35,9 @@ class Experiment:
             self.test_world.draw(isNew = True)
         
         self.state_dict = state.StateDict(self.test_world) 
-        self.scmdp_selector = scmdp.SCMDP(world_ = self.test_world, sdic_ = self.state_dict, T = NUM_EPISODE, m = self.test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
-        self.scmdp_selector.load_from_file()
+        if self.alg == SCMDPBF:
+            self.scmdp_selector = scmdp.SCMDP(world_ = self.test_world, sdic_ = self.state_dict, T = NUM_EPISODE, m = self.test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
+            self.scmdp_selector.load_from_file()
 
     def record(self):
         '''write performance data to file'''
@@ -54,7 +56,7 @@ class Experiment:
                 #    car.print_status()
                 print("Current episode: "), ;print(episode)
                 self.test_world.draw()
-                if MOUSE: self.test_world.window.getMouse()
+                if MOUSE == 1: self.test_world.window.getMouse()
             
             car_arrived = 0
             # cars move sequentially
@@ -70,7 +72,8 @@ class Experiment:
                     if car.arrived(): car_arrived += 1
 
             print("Car Arrived at Destinations:"), ;print(car_arrived)
-                    
+
+MOUSE = int(sys.argv[1])                   
 new_exp = Experiment(alg = ALG, data_file = "data/temp")
 new_exp.run()
 
