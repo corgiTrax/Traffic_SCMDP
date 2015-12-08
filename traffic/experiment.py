@@ -74,7 +74,7 @@ class Experiment:
             print("Car Arrived at Destinations:"), ;print(car_arrived)
 
 MOUSE = int(sys.argv[1])                   
-new_exp = Experiment(alg = ALG, data_file = "data/temp")
+new_exp = Experiment(alg = ALG, vis = False, data_file = "data/temp")
 new_exp.run()
 
 raw_input("Please Press Enter to Exit")

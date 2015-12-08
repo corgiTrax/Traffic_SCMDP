@@ -37,7 +37,8 @@ def policy(G, R, L, d, U_next, gamma):
 
     # Form and solve problem.
     prob = cvxpy.Problem(obj, constraints)
-    prob.solve(solver = cvxpy.MOSEK)
+#    prob.solve(solver = cvxpy.MOSEK)
+    prob.solve()
     
 
     return U.value, Q.value, M.value, ((d.T) * y - z).value

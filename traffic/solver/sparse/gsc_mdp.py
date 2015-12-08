@@ -85,7 +85,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     phi_x=MC.mc_x(x0,phi_M)
     print("Phi_opt", phi_opt)
 
-    TO = 100;
+    TO = 50;
     i = 0;
 
     bf_x=cp.deepcopy(phi_x)
@@ -99,7 +99,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
 
         bf_x = MC.mc_x(x0,bf_M)
 
-        if LA.norm(bf_x-temp_x,np.inf) < 1e-5:
+        if LA.norm(bf_x-temp_x,np.inf) < 1e-4:
             break
 
         i = i + 1

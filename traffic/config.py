@@ -11,9 +11,9 @@ ROW = 0
 COL = 1
 
 #planning horizon
-NUM_EPISODE = 100
+NUM_EPISODE = 70
 
-NUM_CAR = 8000
+NUM_CAR = 4000
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
@@ -34,7 +34,7 @@ NUM_BLK_BTW = 1
 # The default car density
 DEF_TRAFFIC = 0
 # Map
-CAP_MAX = int(1000 * (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP_BIG))
+CAP_MAX = int(100 * (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP_BIG))
 CAP_HZ_ROAD = [1000, 1200, 900, 800]
 CAP_VT_ROAD = [800, 900, 1100, 1400]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
@@ -50,8 +50,8 @@ DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
-REWARD = 10
-COST = -10
+REWARD = 2
+COST = 0
 GAMMA = 0.99
 # calculate number of cars at each corner
 INIT_DENSITY_CORNER = 1.0 / (len(START) * len(CAR_TYPE))

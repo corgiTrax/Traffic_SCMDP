@@ -125,14 +125,14 @@ class SCMDP:
         for i in range(len(DESTINATION)):
             self.L = np.append(self.L, I_BIG, axis = 1)
         # take out the capacity bounds for start end end locations
-        pos_count = 0; remove_count = 0
-        for i in range(self.world.rows):
-            for j in range(self.world.columns):
-                if self.world.world_map[i][j].block_type != OFFROAD:
-                    if [i,j] in START or [i,j] in DESTINATION:
-                        self.L = np.delete(self.L, (pos_count - remove_count), axis = 0)
-                        remove_count += 1
-                    pos_count += 1
+#        pos_count = 0; remove_count = 0
+#        for i in range(self.world.rows):
+#            for j in range(self.world.columns):
+#                if self.world.world_map[i][j].block_type != OFFROAD:
+#                    if [i,j] in START or [i,j] in DESTINATION:
+#                        self.L = np.delete(self.L, (pos_count - remove_count), axis = 0)
+#                        remove_count += 1
+#                    pos_count += 1
 #        print_matrix(self.L)
 
     def construct_d(self):
@@ -145,14 +145,14 @@ class SCMDP:
                     self.d[state_count, 0] = 1.0 * self.world.world_map[i][j].cap_bound / NUM_CAR
                     state_count += 1
         # take out the capacity bounds for start end end locations
-        pos_count = 0; remove_count = 0;
-        for i in range(self.world.rows):
-            for j in range(self.world.columns):
-                if self.world.world_map[i][j].block_type != OFFROAD:
-                    if [i,j] in START or [i,j] in DESTINATION:
-                        self.d = np.delete(self.d, (pos_count - remove_count), axis = 0)
-                        remove_count += 1
-                    pos_count += 1
+#        pos_count = 0; remove_count = 0;
+#        for i in range(self.world.rows):
+#            for j in range(self.world.columns):
+#                if self.world.world_map[i][j].block_type != OFFROAD:
+#                    if [i,j] in START or [i,j] in DESTINATION:
+#                        self.d = np.delete(self.d, (pos_count - remove_count), axis = 0)
+#                        remove_count += 1
+#                    pos_count += 1
 #        print_matrix(self.d)
 
     def construct_x0(self):
