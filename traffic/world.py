@@ -38,6 +38,8 @@ class World:
         # represent map as a 2D array
         self.world_map = [[0 for x in range(self.columns)] for x in range(self.rows)]
         self.construct_map()
+        # the block with minimum capacity
+        self.min_cap = min(min(CAP_HZ_ROAD), min(CAP_VT_ROAD))
 
     def construct_map(self):
         ''' construct the world map by defining each block'''
@@ -165,6 +167,8 @@ class World:
         print(total_cap)
         print("Distance from start to end: ")
         print(self.rows + self.columns - 1)
+        print("Minimum capacity:")
+        print(self.min_cap)
 
     def draw(self, isNew = False):
         if isNew:

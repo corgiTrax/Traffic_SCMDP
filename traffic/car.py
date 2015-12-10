@@ -14,10 +14,14 @@ class Car:
         self.world = world
         # update road block
         self.world.world_map[self.pos[ROW]][self.pos[COL]].add_car(self.dest, self.cap)
-    
-    def arrived(self):
+        self.arrived = False
+
+    def check_arrived(self):
         '''return true if car is already at destination'''
-        return self.pos[ROW] == self.dest[ROW] and self.pos[COL] == self.dest[COL]
+        arrived =  self.pos[ROW] == self.dest[ROW] and self.pos[COL] == self.dest[COL]
+        if arrived and self.arrived == False:
+            self.arrived = True
+        return arrived
 
     def move(self, action):
         if (self.world.success_move(self.pos, action)):

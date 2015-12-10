@@ -47,6 +47,8 @@ class Experiment:
 
     def run(self):
         self.data_file = open(self.data_file_name, 'w')
+        # count arrived cars and capacity
+        car_arrived = 0; cap_arrived = 0;
         for episode in range(NUM_EPISODE - 1): # note this -1
             # visualization
             if self.vis:
@@ -58,20 +60,35 @@ class Experiment:
                 self.test_world.draw()
                 if MOUSE == 1: self.test_world.window.getMouse()
             
-            car_arrived = 0
             # cars move sequentially
             for car in self.cars:
-                if True: #not(car.arrived()):
+                if not(car.arrived):
                     if self.alg == STP:           
                         car.greedy_act() 
                     if self.alg == ASTAR:
                         car.astar_act()
                     if self.alg == SCMDPBF:
-                        car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
-                # else:
-                    if car.arrived(): car_arrived += 1
+                        # heuristic to improve efficiency: if total remaining car capacity is smaller than the minimum capacity of the world, cars go free using shortest path
+                        if TOTAL_CAP - cap_arrived <= self.test_world.min_cap and SCMDP_STP == True:
+                            print("Switched to STP algorithm")
+                            car.greedy_act()
+                        else:
+                            car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
+        
+                    if car.check_arrived(): 
+                        car_arrived += 1
+                        cap_arrived += car.cap
 
             print("Car Arrived at Destinations:"), ;print(car_arrived)
+        # visualization of last step
+        if self.vis:
+            #print("==========================================================")
+            #print("{:<6} {:<6} {:<6}".format("CarID", "Position", "Destination"))
+            #for car in self.cars:
+            #    car.print_status()
+            print("Current episode: "), ;print(episode)
+            self.test_world.draw()
+            if MOUSE == 1: self.test_world.window.getMouse()
 
 MOUSE = int(sys.argv[1])                   
 new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp")
