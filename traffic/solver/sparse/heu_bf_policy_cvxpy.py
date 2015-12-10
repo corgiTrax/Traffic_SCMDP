@@ -40,7 +40,7 @@ def policy(G, R, L, d, x, U_next, U_ref, opt_ref, gamma):
     # Form and solve problem.
     prob = cvxpy.Problem(obj, constraints)
 #    prob.solve(solver = cvxpy.MOSEK, verbose = True)
-    prob.solve(solver = cvxpy.ECOS, verbose = True, max_iters = 500)
-#    prob.solve(solver = cvxpy.SCS, verbose = True, max_iters = 3000) 
+    prob.solve(solver = cvxpy.ECOS, verbose = False, max_iters = 500)
+#    prob.solve(solver = cvxpy.SCS, verbose = False) 
 
     return U.value, Q.value, M.value

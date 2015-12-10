@@ -125,14 +125,15 @@ class SCMDP:
         for i in range(len(DESTINATION)):
             self.L = np.append(self.L, I_BIG, axis = 1)
         # take out the capacity bounds for start end end locations
-        pos_count = 0; remove_count = 0
-        for i in range(self.world.rows):
-            for j in range(self.world.columns):
-                if self.world.world_map[i][j].block_type != OFFROAD:
-                    if [i,j] in START or [i,j] in DESTINATION:
-                        self.L = np.delete(self.L, (pos_count - remove_count), axis = 0)
-                        remove_count += 1
-                    pos_count += 1
+        if REMOVE_CONSTRAINT:
+            pos_count = 0; remove_count = 0
+            for i in range(self.world.rows):
+                for j in range(self.world.columns):
+                    if self.world.world_map[i][j].block_type != OFFROAD:
+                        if [i,j] in START or [i,j] in DESTINATION:
+                            self.L = np.delete(self.L, (pos_count - remove_count), axis = 0)
+                            remove_count += 1
+                        pos_count += 1
 #        print_matrix(self.L)
 
     def construct_d(self):
@@ -145,14 +146,15 @@ class SCMDP:
                     self.d[state_count, 0] = 1.0 * self.world.world_map[i][j].cap_bound / NUM_CAR
                     state_count += 1
         # take out the capacity bounds for start end end locations
-        pos_count = 0; remove_count = 0;
-        for i in range(self.world.rows):
-            for j in range(self.world.columns):
-                if self.world.world_map[i][j].block_type != OFFROAD:
-                    if [i,j] in START or [i,j] in DESTINATION:
-                        self.d = np.delete(self.d, (pos_count - remove_count), axis = 0)
-                        remove_count += 1
-                    pos_count += 1
+        if REMOVE_CONSTRAINT:
+            pos_count = 0; remove_count = 0;
+            for i in range(self.world.rows):
+                for j in range(self.world.columns):
+                    if self.world.world_map[i][j].block_type != OFFROAD:
+                        if [i,j] in START or [i,j] in DESTINATION:
+                            self.d = np.delete(self.d, (pos_count - remove_count), axis = 0)
+                            remove_count += 1
+                        pos_count += 1
 #        print_matrix(self.d)
 
     def construct_x0(self):
@@ -178,18 +180,16 @@ class SCMDP:
         print("Scmdp policy solved")
 #        print("phi_Q", self.phi_Q)
 #        print("bf_Q", self.bf_Q)
+        print("phi_x: "); print(self.phi_x)
         print("bf_x: "); print(self.bf_x)
-        print("L*phix: ");print(np.dot(self.L, self.phi_x))
-        print("L*bfx: ");print(np.dot(self.L, self.bf_x))
+#        print("L*phix: ");print(np.dot(self.L, self.phi_x))
+#        print("L*bfx: ");print(np.dot(self.L, self.bf_x))
 #        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
 #        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
 #        res_bf = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, bf_x)
 #        print(np.amin(res_un))
 #        print(np.amin(res_phi))
 #        print(np.amin(res_bf))
-#        print(np.dot(self.L,un_x))
-#        print(np.dot(self.L,phi_x))
-#        print(np.dot(self.L,bf_x))
 
     def save_to_file(self):
         '''save un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x to .npy files'''

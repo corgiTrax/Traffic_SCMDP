@@ -89,17 +89,31 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     i = 0;
 
     bf_x=cp.deepcopy(phi_x)
+#    bf_U = cp.deepcopy(phi_U)
+#    bf_Q = cp.deepcopy(phi_Q)
 
     while i <= TO:
         print("Current step of solving bf: ",i)
-        temp_x=cp.deepcopy(bf_x)
+        prev_x=cp.deepcopy(bf_x)
+#        prev_U = cp.deepcopy(bf_U)
+#        prev_Q = cp.deepcopy(bf_Q)
 
         for j in range(T - 2, -1, -1):
             bf_U[:,[j]],bf_Q[j,:,:],bf_M[j,:,:]=bfpy.policy(G, R[j,:,:], L, d, bf_x[:,[j]], bf_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
 
         bf_x = MC.mc_x(x0,bf_M)
+        x_norm = LA.norm(bf_x - prev_x, np.inf)
+#        print("x norm diff: ", x_norm)
 
-        if LA.norm(bf_x-temp_x,np.inf) < 1e-4:
+#       U_norm = LA.norm(bf_U - prev_U, np.inf) / LA.norm(bf_U, np.inf)
+#        print("U norm diff: ", U_norm)
+        
+#        Q_norm = 0
+#        for i in range(T - 1):
+#            Q_norm += LA.norm(bf_Q[i,:,:] - prev_Q[i,:,:], np.inf)
+#        print("Q norm diff: ", Q_norm)
+        
+        if x_norm < 1e-5:
             break
 
         i = i + 1
