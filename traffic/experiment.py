@@ -60,7 +60,7 @@ class Experiment:
                 self.test_world.draw()
                 if MOUSE == 1: self.test_world.window.getMouse()
             
-            # cars move sequentially
+            # cars move simutaneously
             for car in self.cars:
                 if not(car.arrived):
                     if self.alg == STP:           
@@ -75,20 +75,25 @@ class Experiment:
                         else:
                             car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
         
+            for car in self.cars:
+                if not(car.arrived):
+                    car.exec_act()
                     if car.check_arrived(): 
                         car_arrived += 1
                         cap_arrived += car.cap
 
-            print("Car Arrived at Destinations:"), ;print(car_arrived)
+            print("Capacities Arrived at Destinations:"), ;print(cap_arrived)
+
         # visualization of last step
         if self.vis:
             #print("==========================================================")
             #print("{:<6} {:<6} {:<6}".format("CarID", "Position", "Destination"))
             #for car in self.cars:
             #    car.print_status()
-            print("Current episode: "), ;print(episode)
+            print("Current episode: "), ;print(episode + 1)
             self.test_world.draw()
             if MOUSE == 1: self.test_world.window.getMouse()
+            print("Car Arrived at Destinations:"), ;print(car_arrived)
 
 MOUSE = int(sys.argv[1])                   
 new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp")

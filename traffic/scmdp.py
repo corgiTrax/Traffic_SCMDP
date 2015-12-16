@@ -12,7 +12,7 @@ import world
 import car
 import state
 
-np.set_printoptions(linewidth = 1000, precision = 5, suppress = True, threshold = 'nan')
+np.set_printoptions(linewidth = 1000, precision = 2, suppress = True, threshold = 'nan')
 
 def print_matrix(matrix):
     (row,col) = numpy.shape(matrix)
@@ -65,7 +65,8 @@ class SCMDP:
         print("Time: ", time.time() - start_time)
 
         # policy matrix
-        self.bf_Q = []; self.bf_x = []; self.phi_Q = []; self.phi_x = []; #self.un_Q = []; self.un_x = []
+        self.bf_Q = []; self.bf_x = []; self.phi_Q = []; self.phi_x = [] 
+        self.un_Q = []; self.un_x = []; self.pro_Q = []; self.pro_x = []
 
     def construct_G(self):
         '''A x n x n'''
@@ -125,6 +126,7 @@ class SCMDP:
         for i in range(len(DESTINATION)):
             self.L = np.append(self.L, I_BIG, axis = 1)
         # take out the capacity bounds for start end end locations
+        self.L_cst = cp.deepcopy(self.L) # back up constrained L
         if REMOVE_CONSTRAINT:
             pos_count = 0; remove_count = 0
             for i in range(self.world.rows):
@@ -172,44 +174,54 @@ class SCMDP:
         # print_matrix(self.x0)
 
     def solve(self):
-#        [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         if SOLVER == CVXOPT:
             [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxopt(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         else:
-            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+            [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x, self.pro_Q, self.pro_x] = \
+            GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+
         print("Scmdp policy solved")
+
+#        print("un_Q", self.un_Q)
+#        print("un_x: "); print(self.un_x)
+#        print("L*unx: ");print(np.dot(self.L_cst, self.un_x))
+
 #        print("phi_Q", self.phi_Q)
-#        print("bf_Q", self.bf_Q)
-        print("phi_x: "); print(self.phi_x)
+#        print("phi_x: "); print(self.phi_x)
+#        print("L*phix: ");print(np.dot(self.L_cst, self.phi_x))
+
+        print("bf_Q", self.bf_Q)
         print("bf_x: "); print(self.bf_x)
-#        print("L*phix: ");print(np.dot(self.L, self.phi_x))
-#        print("L*bfx: ");print(np.dot(self.L, self.bf_x))
-#        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
-#        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
-#        res_bf = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, bf_x)
-#        print(np.amin(res_un))
-#        print(np.amin(res_phi))
-#        print(np.amin(res_bf))
+        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
+
+ #       print("pro_Q", self.pro_Q)
+        print("pro_x: "); print(self.pro_x)
+        print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
 
     def save_to_file(self):
-        '''save un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x to .npy files'''
-#        np.save("policy/un_Q", self.un_Q)
-#        np.save("policy/un_x", self.un_x)
+        '''save all to .npy files'''
+        np.save("policy/un_Q", self.un_Q)
+        np.save("policy/un_x", self.un_x)
         np.save("policy/phi_Q", self.phi_Q)
         np.save("policy/phi_x", self.phi_x)
         np.save("policy/bf_Q", self.bf_Q)
         np.save("policy/bf_x", self.bf_x)
+        np.save("policy/pro_Q", self.pro_Q)
+        np.save("policy/pro_x", self.pro_x)
 
     def load_from_file(self):
-#        self.un_Q = np.load("policy/un_Q.npy")
-#        self.un_x = np.load("policy/un_x.npy")
+        self.un_Q = np.load("policy/un_Q.npy")
+        self.un_x = np.load("policy/un_x.npy")
         self.phi_Q = np.load("policy/phi_Q.npy")
         self.phi_x = np.load("policy/phi_x.npy")
         self.bf_Q = np.load("policy/bf_Q.npy")
         self.bf_x = np.load("policy/bf_x.npy")
+        self.pro_Q = np.load("policy/pro_Q.npy")
+        self.pro_x = np.load("policy/pro_x.npy")
 
     def choose_act(self, state, T):
         policy = self.bf_Q[T][state]
+#        policy = self.pro_Q[T][state]
         # print("Policy vector", policy)
         roulette_selector = roulette.Roulette(policy)
         action = roulette_selector.select()

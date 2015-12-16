@@ -7,12 +7,8 @@
 # discount factor gamma(1,1)
 import numpy as np
 
-def policy(gg, rt, u_next, gamma):
-    [n, nA] = gg.shape
-#    gg=np.zeros((n,n*A))
-#    for i in range(A):
-#        gg[:,i*n:i*n+n]=g[i,:,:]
-    A = int(nA / n)
+def policy(g, rt, u_next, gamma):
+    [A, n, tmp] = g.shape 
 
     qval=np.zeros((n,A))
     Q=np.zeros((n,A))
@@ -20,7 +16,6 @@ def policy(gg, rt, u_next, gamma):
 
     for i in range(n):
         for a in range(A):
-            #temp_g=g[a,:,:]
             qval[i,a]=rt[i,a]+np.dot(gamma*g[a,:,i], u_next)
         val=np.amax(qval[i,:])
         ind=np.argmax(qval[i,:])
@@ -33,4 +28,4 @@ def policy(gg, rt, u_next, gamma):
                 M[i,j]=M[i,j]+g[k,i,j]*Q[j,k]
 
 
-    return V, Q,  M
+    return V, Q, M

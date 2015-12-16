@@ -17,6 +17,7 @@ import mc_x as MC
 
 import phi_policy_cvxpy as phipy
 import heu_bf_policy_cvxpy as bfpy 
+import pro_policy_cvxpy as propy
 
 np.set_printoptions(linewidth = 1000, precision = 2, suppress = True, threshold = 'nan')
 
@@ -77,18 +78,21 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     # Backward Induction
     for j in range(T-2,-1,-1):
         print("Current step of solving phi: ", j)
-        # [un_U[:,[j]],un_Q[j,:,:],un_M[j,:,:]]=un.policy(G, R[j,:,:], un_U[:,[j+1]], gamma)
-        [phi_U[:,[j]],phi_Q[j,:,:],phi_M[j,:,:],phi_opt[0,j]]=phipy.policy(G, R[j,:,:], L, d, phi_U[:,j+1], gamma)
-        #[pro_U[:,j],pro_Q[j,:,:],pro_M[j,:,:]]=pro_policy(G, R[j,:,:], d, pro_U[:,j+1], gamma);
+        # note that un_policy solver takes 3D G matrix as input, other algorithms take 2D
+        [un_U[:,[j]],un_Q[j,:,:],un_M[j,:,:]] = un.policy(G_3D, R[j,:,:], un_U[:,[j+1]], gamma)
+        [phi_U[:,[j]],phi_Q[j,:,:],phi_M[j,:,:],phi_opt[0,j]] = phipy.policy(G, R[j,:,:], L, d, phi_U[:,j+1], gamma)
+        [pro_U[:,[j]],pro_Q[j,:,:],pro_M[j,:,:]] = propy.policy(G, R[j,:,:], L, d, un_Q[j,:,:], pro_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
 
-    un_x=MC.mc_x(x0,un_M)
-    phi_x=MC.mc_x(x0,phi_M)
+    un_x = MC.mc_x(x0,un_M)
+    phi_x = MC.mc_x(x0,phi_M)
+    bf_x=cp.deepcopy(phi_x)
+    pro_x = MC.mc_x(x0,pro_M)
+
     print("Phi_opt", phi_opt)
 
     TO = 50;
     i = 0;
 
-    bf_x=cp.deepcopy(phi_x)
 #    bf_U = cp.deepcopy(phi_U)
 #    bf_Q = cp.deepcopy(phi_Q)
 
@@ -127,7 +131,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
 #    dim0, dim1, dim2 = phi_M.shape
 #    for i in range(dim0):
 #        print(i); print_matrix(phi_M[i,:,:])
-    return phi_Q, phi_x, bf_Q, bf_x
-#    return un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x
+#    return phi_Q, phi_x, bf_Q, bf_x
+    return un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x, pro_Q, pro_x
 
 

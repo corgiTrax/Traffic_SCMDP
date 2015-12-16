@@ -25,8 +25,8 @@ class Block:
 
     def congest(self):
         '''return true if a car can successfuly move into the block, based on current traffic capacity'''
-        if sum(self.cap_cur) < self.cap_bound: return False
-        else: return True
+        if sum(self.cap_cur) >= self.cap_bound: return True
+        else: return False
         # take this out, for now simply cannot enter congestion state
         #else:
         #   return random.random() > self.congest_prob()

@@ -15,6 +15,7 @@ class Car:
         # update road block
         self.world.world_map[self.pos[ROW]][self.pos[COL]].add_car(self.dest, self.cap)
         self.arrived = False
+        self.act = STAY
 
     def check_arrived(self):
         '''return true if car is already at destination'''
@@ -49,7 +50,7 @@ class Car:
             elif dists[i] == dists[best[0]]: best.append(i)
         if len(best) == 1: act = best[0]
         elif len(best) > 1: act = random.choice(best)
-        self.move(act)
+        self.act = act
 
     def astar_act(self):
         '''an astar (time-based) agent'''
@@ -60,13 +61,18 @@ class Car:
             elif next_pos[ROW] - self.pos[ROW] == 1: act = DOWN
             elif next_pos[COL] - self.pos[COL] == -1: act = LEFT
             elif next_pos[COL] - self.pos[COL] == 1: act = RIGHT
-            self.move(act)
+            self.act = act
+        else: self.act = STAY
         # print(path)
     
     def scmdpbf_act(self, scmdp_selector, episode, state_dict):
         state_vec = [self.pos[ROW], self.pos[COL], self.dest[ROW], self.dest[COL], self.car_type]
         state =  state_dict.get_num(state_vec)
-        self.move(scmdp_selector.choose_act(state,episode))
+        self.act = scmdp_selector.choose_act(state,episode)
+
+    def exec_act(self):
+        '''execute saved action'''
+        self.move(self.act)
 
     def print_status(self):
         print("{:<6}".format(self.identity)),
