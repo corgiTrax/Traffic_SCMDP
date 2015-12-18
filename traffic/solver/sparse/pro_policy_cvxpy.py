@@ -2,7 +2,7 @@ import cvxpy
 #import cvxpy as cvx
 import numpy as np
 
-def policy(G, R, L, d, un_Q, U_next, U_ref, opt_ref, gamma):
+def policy(G, R, L, d, un_Q, un_M, U_next, U_ref, opt_ref, gamma):
     [n,A]=R.shape
     [m,temp]=d.shape
 
@@ -35,10 +35,11 @@ def policy(G, R, L, d, un_Q, U_next, U_ref, opt_ref, gamma):
                    ]
 
     # Form objective.
-    obj = cvxpy.Minimize(cvxpy.norm((Q - un_Q),'fro'))
+#    obj = cvxpy.Minimize(cvxpy.norm((Q - un_Q), 'fro'))
+    obj = cvxpy.Minimize(cvxpy.norm((M - un_M), 'fro'))
 
     # Form and solve problem.
     prob = cvxpy.Problem(obj, constraints)
-    prob.solve(solver = cvxpy.ECOS, verbose = False, max_iters = 500)
+    prob.solve(solver = cvxpy.ECOS, verbose = True, max_iters = 1000)
 
     return U.value, Q.value, M.value

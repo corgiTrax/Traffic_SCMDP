@@ -11,9 +11,9 @@ ROW = 0
 COL = 1
 
 #planning horizon
-NUM_EPISODE = 100
+NUM_EPISODE = 40
 
-NUM_CAR = 8000
+NUM_CAR = 4000
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
@@ -38,8 +38,8 @@ TOTAL_CAP = (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP
 # remove constraint at start and destination states
 REMOVE_CONSTRAINT = True
 CAP_MAX = int(1 * (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP_BIG))
-CAP_HZ_ROAD = [1000, 900, 1000]
-CAP_VT_ROAD = [1000, 1200, 1000]
+CAP_HZ_ROAD = [1000, 1000, 1000]
+CAP_VT_ROAD = [1000, 1000, 1000]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
@@ -54,8 +54,8 @@ DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_
 
 # get reward at destination
 REWARD = 10
-COST = -10
-GAMMA = 1
+COST = 0
+GAMMA = 0.99
 # calculate number of cars at each corner
 INIT_DENSITY_CORNER = 1.0 / (len(START) * len(CAR_TYPE))
 
@@ -78,4 +78,4 @@ SCMDPBF = 3
 ALGS = [STP, ASTAR, SCMDPPHI, SCMDPBF]
 ALG = SCMDPBF
 #heuristic to improve efficiency
-SCMDP_STP = True
+SCMDP_STP = False

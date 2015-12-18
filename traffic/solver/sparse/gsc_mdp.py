@@ -81,7 +81,8 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
         # note that un_policy solver takes 3D G matrix as input, other algorithms take 2D
         [un_U[:,[j]],un_Q[j,:,:],un_M[j,:,:]] = un.policy(G_3D, R[j,:,:], un_U[:,[j+1]], gamma)
         [phi_U[:,[j]],phi_Q[j,:,:],phi_M[j,:,:],phi_opt[0,j]] = phipy.policy(G, R[j,:,:], L, d, phi_U[:,j+1], gamma)
-        [pro_U[:,[j]],pro_Q[j,:,:],pro_M[j,:,:]] = propy.policy(G, R[j,:,:], L, d, un_Q[j,:,:], pro_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
+        print("Current step of solving pro: ", j)
+        [pro_U[:,[j]],pro_Q[j,:,:],pro_M[j,:,:]] = propy.policy(G, R[j,:,:], L, d, un_Q[j,:,:], un_M[j,:,:], pro_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
 
     un_x = MC.mc_x(x0,un_M)
     phi_x = MC.mc_x(x0,phi_M)
@@ -90,7 +91,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
 
     print("Phi_opt", phi_opt)
 
-    TO = 50;
+    TO = -1;
     i = 0;
 
 #    bf_U = cp.deepcopy(phi_U)

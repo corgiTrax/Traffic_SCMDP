@@ -182,17 +182,17 @@ class SCMDP:
 
         print("Scmdp policy solved")
 
-#        print("un_Q", self.un_Q)
-#        print("un_x: "); print(self.un_x)
-#        print("L*unx: ");print(np.dot(self.L_cst, self.un_x))
+        print("un_Q", self.un_Q)
+        print("un_x: "); print(self.un_x)
+        print("L*unx: ");print(np.dot(self.L_cst, self.un_x))
 
 #        print("phi_Q", self.phi_Q)
 #        print("phi_x: "); print(self.phi_x)
 #        print("L*phix: ");print(np.dot(self.L_cst, self.phi_x))
 
 #        print("bf_Q", self.bf_Q)
-        print("bf_x: "); print(self.bf_x)
-        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
+#        print("bf_x: "); print(self.bf_x)
+#        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
 
 #        print("pro_Q", self.pro_Q)
         print("pro_x: "); print(self.pro_x)
@@ -220,9 +220,8 @@ class SCMDP:
         self.pro_x = np.load("policy/pro_x.npy")
 
     def choose_act(self, state, T):
-        policy = self.bf_Q[T][state]
-#        policy = self.pro_Q[T][state]
-#        policy = self.pro_Q[0][state]
+#        policy = self.bf_Q[T][state]
+        policy = self.pro_Q[0][state]
         # print("Policy vector", policy)
         roulette_selector = roulette.Roulette(policy)
         action = roulette_selector.select()
