@@ -125,6 +125,9 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
 #    print(phi_U)
 #    print("bf_u: ")
 #    print(bf_U)
+#    print("pro_u: ")
+#    print(pro_U)
+
     # print("M shape", np.shape(phi_M))
 #    print("phiM: ");print(phi_M)
 #    print("bf_M: "); print(bf_M)

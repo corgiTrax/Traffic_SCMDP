@@ -11,21 +11,21 @@ def policy(g, rt, u_next, gamma):
     [A, n, tmp] = g.shape 
 
     qval=np.zeros((n,A))
-    Q=np.zeros((n,A))
-    V=np.zeros((n,1))
+    Q = np.zeros((n,A))
+    V = np.zeros((n,1))
 
     for i in range(n):
         for a in range(A):
-            qval[i,a]=rt[i,a]+np.dot(gamma*g[a,:,i], u_next)
-        val=np.amax(qval[i,:])
-        ind=np.argmax(qval[i,:])
-        Q[i,ind]=1
-        V[i]=val
-    M=np.zeros((n,n))
+            qval[i,a] = rt[i,a] + np.dot(gamma * g[a,:,i], u_next)
+        val = np.amax(qval[i,:])
+        ind = np.argmax(qval[i,:])
+        Q[i,ind] = 1
+        V[i] = val
+    M = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
             for k in range(A):
-                M[i,j]=M[i,j]+g[k,i,j]*Q[j,k]
+                M[i,j] = M[i,j] + g[k,i,j] * Q[j,k]
 
 
     return V, Q, M

@@ -35,10 +35,10 @@ def policy(G, R, L, d, un_Q, U_next, U_ref, opt_ref, gamma):
                    ]
 
     # Form objective.
-    obj = cvxpy.Minimize(cvxpy.norm((Q-un_Q),'fro'))
+    obj = cvxpy.Minimize(cvxpy.norm((Q - un_Q),'fro'))
 
     # Form and solve problem.
     prob = cvxpy.Problem(obj, constraints)
-    prob.solve(solver = cvxpy.ECOS, max_iters = 500)
+    prob.solve(solver = cvxpy.ECOS, verbose = False, max_iters = 500)
 
     return U.value, Q.value, M.value

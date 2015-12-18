@@ -190,11 +190,11 @@ class SCMDP:
 #        print("phi_x: "); print(self.phi_x)
 #        print("L*phix: ");print(np.dot(self.L_cst, self.phi_x))
 
-        print("bf_Q", self.bf_Q)
+#        print("bf_Q", self.bf_Q)
         print("bf_x: "); print(self.bf_x)
         print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
 
- #       print("pro_Q", self.pro_Q)
+#        print("pro_Q", self.pro_Q)
         print("pro_x: "); print(self.pro_x)
         print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
 
@@ -222,6 +222,7 @@ class SCMDP:
     def choose_act(self, state, T):
         policy = self.bf_Q[T][state]
 #        policy = self.pro_Q[T][state]
+#        policy = self.pro_Q[0][state]
         # print("Policy vector", policy)
         roulette_selector = roulette.Roulette(policy)
         action = roulette_selector.select()
