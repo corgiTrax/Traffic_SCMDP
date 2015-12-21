@@ -67,6 +67,7 @@ class SCMDP:
         # policy matrix
         self.bf_Q = []; self.bf_x = []; self.phi_Q = []; self.phi_x = [] 
         self.un_Q = []; self.un_x = []; self.pro_Q = []; self.pro_x = []
+        self.unbf_Q = []; self.unbf_x = [];
 
     def construct_G(self):
         '''A x n x n'''
@@ -97,11 +98,15 @@ class SCMDP:
         self.RT = np.zeros((self.n,1)) 
         for i in range(self.n):
             state_vec = self.sdic.get_state(i)
-            # if the current position is equal to destination
+            # if the current position is equal to destination, give a reward
             if state.same_loc([state_vec[0], state_vec[1]], [state_vec[2], state_vec[3]]):
                 self.RT[i,0] = REWARD
+            # if the current position is equal to start, give a cost
             else:
-                self.RT[i,0] = COST
+                dest = [state_vec[2], state_vec[3]]
+                start = START[DESTINATION.index(dest)]
+                if state.same_loc([state_vec[0], state_vec[1]], [start[0], start[1]]):
+                    self.RT[i,0] = COST
 #        print_matrix(self.RT)
 
     def construct_R(self):
@@ -117,14 +122,14 @@ class SCMDP:
     def construct_L(self):
         ''' m x n'''
         #self.L = np.zeros((self.m, self.n))
-        # note: if we have more than two types of car this need to change
+        # note: if we have more than or less than two types of car this need to change
         I_SMALL = CAP_SMALL * np.eye(self.m) # small car
         I_BIG = CAP_BIG * np.eye(self.m) # big car
         self.L = I_SMALL
         for i in range(len(DESTINATION) - 1):
             self.L = np.append(self.L, I_SMALL, axis = 1)
-        for i in range(len(DESTINATION)):
-            self.L = np.append(self.L, I_BIG, axis = 1)
+#        for i in range(len(DESTINATION)):
+#            self.L = np.append(self.L, I_BIG, axis = 1)
         # take out the capacity bounds for start end end locations
         self.L_cst = cp.deepcopy(self.L) # back up constrained L
         if REMOVE_CONSTRAINT:
@@ -171,32 +176,33 @@ class SCMDP:
                 des_pos = [state_vec[2], state_vec[3]]
                 if state.same_loc(DESTINATION[START.index(start_pos)], des_pos):
                     self.x0[i, 0] = INIT_DENSITY_CORNER
-        # print_matrix(self.x0)
+#        print_matrix(self.x0)
 
     def solve(self):
-        if SOLVER == CVXOPT:
-            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxopt(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
-        else:
-            [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x, self.pro_Q, self.pro_x] = \
-            GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
-
+        [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x, self.pro_Q, self.pro_x, self.unbf_Q, self.unbf_x] = \
+        GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("Scmdp policy solved")
 
-        print("un_Q", self.un_Q)
-        print("un_x: "); print(self.un_x)
-        print("L*unx: ");print(np.dot(self.L_cst, self.un_x))
+#        print("un_Q", self.un_Q)
+#        print("un_x: "); print(self.un_x)
+#        print("L*unx: ");print(np.dot(self.L_cst, self.un_x))
 
 #        print("phi_Q", self.phi_Q)
 #        print("phi_x: "); print(self.phi_x)
 #        print("L*phix: ");print(np.dot(self.L_cst, self.phi_x))
 
 #        print("bf_Q", self.bf_Q)
-#        print("bf_x: "); print(self.bf_x)
-#        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
+        print("bf_x: "); print(self.bf_x)
+        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
 
 #        print("pro_Q", self.pro_Q)
-        print("pro_x: "); print(self.pro_x)
-        print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
+#        print("pro_x: "); print(self.pro_x)
+#        print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
+
+#        print("pro_Q", self.pro_Q)
+        print("unbf_x: "); print(self.unbf_x)
+        print("L*unbfx: ");print(np.dot(self.L_cst, self.unbf_x))
+
 
     def save_to_file(self):
         '''save all to .npy files'''
@@ -208,6 +214,9 @@ class SCMDP:
         np.save("policy/bf_x", self.bf_x)
         np.save("policy/pro_Q", self.pro_Q)
         np.save("policy/pro_x", self.pro_x)
+        np.save("policy/unbf_Q", self.unbf_Q)
+        np.save("policy/unbf_x", self.unbf_x)
+
 
     def load_from_file(self):
         self.un_Q = np.load("policy/un_Q.npy")
@@ -218,10 +227,13 @@ class SCMDP:
         self.bf_x = np.load("policy/bf_x.npy")
         self.pro_Q = np.load("policy/pro_Q.npy")
         self.pro_x = np.load("policy/pro_x.npy")
+        self.unbf_Q = np.load("policy/unbf_Q.npy")
+        self.unbf_x = np.load("policy/unbf_x.npy")
 
     def choose_act(self, state, T):
 #        policy = self.bf_Q[T][state]
-        policy = self.pro_Q[0][state]
+        policy = self.unbf_Q[T][state]
+#        policy = self.pro_Q[0][state]
         # print("Policy vector", policy)
         roulette_selector = roulette.Roulette(policy)
         action = roulette_selector.select()
