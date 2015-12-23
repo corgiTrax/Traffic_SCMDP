@@ -75,11 +75,27 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     bf_U[:,[T-1]] = cp.deepcopy(RT)
 
 
+    # solving unconstrained policy and U
+    for j in range(T-2,-1,-1):
+       print("Current step of solving un: ", j)
+       [un_U[:,[j]],un_Q[j,:,:],un_M[j,:,:]] = un.policy(G_3D, R[j,:,:], un_U[:,[j+1]], gamma)
+
+    # using un_U to solve for x using greedy one-step optimization
+    unbf_Q = np.zeros((T-1, n, A))
+    unbf_M = np.zeros((T-1, n, n))
+    unbf_x = np.zeros((n, T))
+    unbf_x[:,[0]] = cp.deepcopy(x0)
+    for j in range(0, T - 1):
+        print("Current step of solving unbf: ",j)
+        unbf_Q[j,:,:], unbf_M[j,:,:], unbf_x[:,[j + 1]] = bfpy.policy_unU2(G, R[j,:,:], L, d, unbf_x[:,[j]], un_U[:,j + 1],  gamma)
+
+#    print("un_u: ")
+#    print(un_U)
+
     # Backward Induction
     for j in range(T-2,-1,-1):
         print("Current step of solving phi: ", j)
-        # note that un_policy solver takes 3D G matrix as input, other algorithms take 2D
-        [un_U[:,[j]],un_Q[j,:,:],un_M[j,:,:]] = un.policy(G_3D, R[j,:,:], un_U[:,[j+1]], gamma)
+       # note that un_policy solver takes 3D G matrix as input, other algorithms take 2D
         [phi_U[:,[j]],phi_Q[j,:,:],phi_M[j,:,:],phi_opt[0,j]] = phipy.policy(G, R[j,:,:], L, d, phi_U[:,j+1], gamma)
         print("Current step of solving pro: ", j)
         [pro_U[:,[j]],pro_Q[j,:,:],pro_M[j,:,:]] = propy.policy(G, R[j,:,:], L, d, un_Q[j,:,:], un_M[j,:,:], un_U[:,j], pro_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
@@ -91,17 +107,17 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
 
     print("Phi_opt", phi_opt)
 
-    TO = 20;
+    TO = -1;
     i = 0;
 
-#    bf_U = cp.deepcopy(phi_U)
-#    bf_Q = cp.deepcopy(phi_Q)
+    bf_U = cp.deepcopy(phi_U)
+    bf_Q = cp.deepcopy(phi_Q)
 
     while i <= TO:
         print("Current step of solving bf: ",i)
         prev_x=cp.deepcopy(bf_x)
-#        prev_U = cp.deepcopy(bf_U)
-#        prev_Q = cp.deepcopy(bf_Q)
+        prev_U = cp.deepcopy(bf_U)
+        prev_Q = cp.deepcopy(bf_Q)
 
         for j in range(T - 2, -1, -1):
             bf_U[:,[j]],bf_Q[j,:,:],bf_M[j,:,:]=bfpy.policy(G, R[j,:,:], L, d, bf_x[:,[j]], bf_U[:,j+1], phi_U[:,j], phi_opt[0,j], gamma)
@@ -110,29 +126,19 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
         x_norm = LA.norm(bf_x - prev_x, np.inf)
 #        print("x norm diff: ", x_norm)
 
-#       U_norm = LA.norm(bf_U - prev_U, np.inf) / LA.norm(bf_U, np.inf)
+#        U_norm = LA.norm(bf_U - prev_U, np.inf) / LA.norm(bf_U, np.inf)
 #        print("U norm diff: ", U_norm)
-        
+       
 #        Q_norm = 0
 #        for i in range(T - 1):
 #            Q_norm += LA.norm(bf_Q[i,:,:] - prev_Q[i,:,:], np.inf)
 #        print("Q norm diff: ", Q_norm)
-        
+       
         if x_norm < 1e-5:
             break
 
         i = i + 1
 
-    # using un_U to solve for x
-    unbf_Q = np.zeros((T-1, n, A))
-    unbf_M = np.zeros((T-1, n, n))
-    unbf_x = np.zeros((n, T))
-    unbf_x[:,[0]] = cp.deepcopy(x0)
-    for j in range(0, T - 1):
-        unbf_Q[j,:,:], unbf_M[j,:,:], unbf_x[:,[j + 1]] = bfpy.policy_unU(G, R[j,:,:], L, d, unbf_x[:,[j]], un_U[:,j + 1], phi_U[:,j], phi_opt[0, j], gamma)
-
-    print("un_u: ")
-    print(un_U)
 
 #    print("phi_u: ")
 #    print(phi_U)

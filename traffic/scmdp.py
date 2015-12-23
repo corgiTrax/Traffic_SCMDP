@@ -107,6 +107,8 @@ class SCMDP:
                 start = START[DESTINATION.index(dest)]
                 if state.same_loc([state_vec[0], state_vec[1]], [start[0], start[1]]):
                     self.RT[i,0] = COST
+                else:
+                    self.RT[i,0] = 0.5
 #        print_matrix(self.RT)
 
     def construct_R(self):
@@ -128,8 +130,8 @@ class SCMDP:
         self.L = I_SMALL
         for i in range(len(DESTINATION) - 1):
             self.L = np.append(self.L, I_SMALL, axis = 1)
-#        for i in range(len(DESTINATION)):
-#            self.L = np.append(self.L, I_BIG, axis = 1)
+        for i in range(len(DESTINATION)):
+            self.L = np.append(self.L, I_BIG, axis = 1)
         # take out the capacity bounds for start end end locations
         self.L_cst = cp.deepcopy(self.L) # back up constrained L
         if REMOVE_CONSTRAINT:
@@ -192,12 +194,12 @@ class SCMDP:
 #        print("L*phix: ");print(np.dot(self.L_cst, self.phi_x))
 
 #        print("bf_Q", self.bf_Q)
-        print("bf_x: "); print(self.bf_x)
-        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
+#        print("bf_x: "); print(self.bf_x)
+#        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
 
-#        print("pro_Q", self.pro_Q)
-#        print("pro_x: "); print(self.pro_x)
-#        print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
+        print("pro_Q", self.pro_Q)
+        print("pro_x: "); print(self.pro_x)
+        print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
 
 #        print("pro_Q", self.pro_Q)
         print("unbf_x: "); print(self.unbf_x)
@@ -232,8 +234,8 @@ class SCMDP:
 
     def choose_act(self, state, T):
 #        policy = self.bf_Q[T][state]
-        policy = self.unbf_Q[T][state]
-#        policy = self.pro_Q[0][state]
+#        policy = self.unbf_Q[T][state]
+        policy = self.pro_Q[0][state]
         # print("Policy vector", policy)
         roulette_selector = roulette.Roulette(policy)
         action = roulette_selector.select()

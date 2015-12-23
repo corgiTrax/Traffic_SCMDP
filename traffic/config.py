@@ -3,27 +3,27 @@ import random
 import copy as cp
 import sys
 
-CVXOPT = 0
-CVXPY = 1
+CVXPY = 0
 SOLVER = CVXPY
 
 ROW = 0
 COL = 1
 
 #planning horizon
-NUM_EPISODE = 20
+NUM_EPISODE = 30
 
 NUM_CAR = 8000
 # car 
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
+
 # car types
 SMALL = 0
 BIG = 1
 CAP_SMALL = 1
 CAP_BIG = 3
-CAR_TYPE = [SMALL]
-CAP_CAR = [CAP_SMALL]
+CAR_TYPE = [SMALL, BIG]
+CAP_CAR = [CAP_SMALL, CAP_BIG]
 
 # Enums for the map
 INTERSECT = 0
@@ -36,21 +36,21 @@ DEF_TRAFFIC = 0
 # Map
 TOTAL_CAP = (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP_BIG)
 # remove constraint at start and destination states
-REMOVE_CONSTRAINT = True
+REMOVE_CONSTRAINT = False
 CAP_MAX = int(1 * (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP_BIG))
-CAP_HZ_ROAD = [1000, 1000, 1000]
-CAP_VT_ROAD = [1000, 1000, 1000]
+CAP_HZ_ROAD = [1000, 1000,  1000]
+CAP_VT_ROAD = [1000, 1000,  1000]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
 # start and destination positions
 CAR_COLOR = ["red", "orange", "yellow", "green"]
-#START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
-#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
+START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
+DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
 #START= [[0,0], [0, WORLD_COLS - 1]]
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0]]
-START= [[0,0]]
-DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
+#START= [[0,0]]
+#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
 REWARD = 1
@@ -77,4 +77,4 @@ SCMDPBF = 3
 ALGS = [STP, ASTAR, SCMDPPHI, SCMDPBF]
 ALG = SCMDPBF
 #heuristic to improve efficiency
-SCMDP_STP = True
+SCMDP_STP = False
