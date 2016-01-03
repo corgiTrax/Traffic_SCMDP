@@ -135,23 +135,12 @@ class Experiment:
                 # actual move step
                 self.move_agents()
 
-            # algorithm 4: SC-MDP feasible policy
-            elif self.alg == SCMDPPHI:
+            # algorithm 4,5,6,7,8: SC-MDP policies
+            else: 
                 # assignment
                 for patch in self.patches:
                     for agent in patch.agents: 
-                        patch_num = SCMDP_SELECTOR.choose_act_phi(state = patch.identity, T = episode)
-                        agent.assign_to(patch_num)
-                        agent.tick() # important: time clock counts
-                # actual move step
-                self.move_agents()
-
-            # algorithm 5: SC-MDP with heuristic
-            elif self.alg == SCMDPBF:
-                # assignment
-                for patch in self.patches:
-                    for agent in patch.agents: 
-                        patch_num = SCMDP_SELECTOR.choose_act(state = patch.identity, T = episode) # agent.clock 
+                        patch_num = SCMDP_SELECTOR.choose_act(state = patch.identity, T = episode, alg = self.alg)
                         agent.assign_to(patch_num)
                         agent.tick() # important: time clock counts
                 # actual move step
@@ -169,21 +158,21 @@ class Experiment:
             # self.print_patch_status()
             self.record(episode)
 
-            # Drop agents and add to home (except home)
-            for i in range(1, len(self.patches)):
-                for agent in self.patches[i].agents[:]: #copy
-                    if random.random() < self.drop_ratio:
-                        self.patches[i].remove_agent(agent)
-                        self.drop_count += 1 
-
-            # add some agents back to home (not the same number)
-            max_num_add = self.drop_count
-            for i in range(max_num_add):
-                if random.random() < self.add_ratio:
-                    new_agent = world.Agent(identity = self.num_agent - self.drop_count)
-                    # put all agents at home
-                    self.patches[HOME].assign_agent(new_agent)
-                    self.drop_count -= 1
+#            # Drop agents and add to home (except home)
+#            for i in range(1, len(self.patches)):
+#                for agent in self.patches[i].agents[:]: #copy
+#                    if random.random() < self.drop_ratio:
+#                        self.patches[i].remove_agent(agent)
+#                        self.drop_count += 1 
+#
+#            # add some agents back to home (not the same number)
+#            max_num_add = self.drop_count
+#            for i in range(max_num_add):
+#                if random.random() < self.add_ratio:
+#                    new_agent = world.Agent(identity = self.num_agent - self.drop_count)
+#                    # put all agents at home
+#                    self.patches[HOME].assign_agent(new_agent)
+#                    self.drop_count -= 1
         
         print("experiment finished")
         self.data_file.close()

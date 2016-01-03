@@ -1,6 +1,6 @@
 import numpy as np
 from cvxopt import matrix, solvers
-import scmdp_solver.sparse.gsc_mdp as GSC
+import solver.sparse.gsc_mdp as GSC
 import copy as cp
 import roulette
 from config import *
@@ -62,55 +62,53 @@ class SCMDP:
         self.gamma = 1 
         
         # policy matrix
-        # self.bf_Q = []
-        # self.bf_x = []
-        # self.phi_Q = []
-        # self.phi_x = []
+        self.bf_Q = []; self.bf_x = []; self.phi_Q = []; self.phi_x = [] 
+        self.un_Q = []; self.un_x = []; self.pro_Q = []; self.pro_x = []
+        self.unbf_Q = []; self.unbf_x = [];
 
     def solve(self):
-        if SOLVER == CVXOPT:
-            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxopt(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
-        else:
-            [self.phi_Q, self.phi_x, self.bf_Q, self.bf_x] = GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+        [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x,\
+        self.pro_Q, self.pro_x, self.unbf_Q, self.unbf_x]\
+        = GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
         print("scmdp policy solved")
-        print("phi_x: "),; print(self.phi_x)
-        print("bf_x: "),; print(self.bf_x)
-#        res_un = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, un_x)
-#        res_phi = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, phi_x)
-#        res_bf = np.dot(self.d, np.ones((1, self.T))) - np.dot(self.L, bf_x)
-#        print(np.amin(res_un))
-#        print(np.amin(res_phi))
-#        print(np.amin(res_bf))
-#        print(np.dot(self.L,un_x))
-#        print(np.dot(self.L,phi_x))
-#        print(np.dot(self.L,bf_x))
 
     def save_to_file(self, path):
-        '''save un_Q, un_x, phi_Q, phi_x, bf_Q, bf_x to .npy files'''
-#        np.save("policy/un_Q", self.un_Q)
-#        np.save("policy/un_x", self.un_x)
-        np.save(path + "phi_Q", self.phi_Q)
-        np.save(path + "phi_x", self.phi_x)
-        np.save(path + "bf_Q", self.bf_Q)
-        np.save(path + "bf_x", self.bf_x)
+        '''save all to .npy files'''
+        np.save("policy/un_Q", self.un_Q)
+        np.save("policy/un_x", self.un_x)
+        np.save("policy/phi_Q", self.phi_Q)
+        np.save("policy/phi_x", self.phi_x)
+        np.save("policy/bf_Q", self.bf_Q)
+        np.save("policy/bf_x", self.bf_x)
+        np.save("policy/pro_Q", self.pro_Q)
+        np.save("policy/pro_x", self.pro_x)
+        np.save("policy/unbf_Q", self.unbf_Q)
+        np.save("policy/unbf_x", self.unbf_x)
 
     def load_from_file(self, path):
-        self.phi_Q = np.load(path + "phi_Q.npy")
-        self.phi_x = np.load(path + "phi_x.npy")
-        self.bf_Q = np.load(path + "bf_Q.npy")
-        self.bf_x = np.load(path + "bf_x.npy")
+        self.un_Q = np.load("policy/un_Q.npy")
+        self.un_x = np.load("policy/un_x.npy")
+        self.phi_Q = np.load("policy/phi_Q.npy")
+        self.phi_x = np.load("policy/phi_x.npy")
+        self.bf_Q = np.load("policy/bf_Q.npy")
+        self.bf_x = np.load("policy/bf_x.npy")
+        self.pro_Q = np.load("policy/pro_Q.npy")
+        self.pro_x = np.load("policy/pro_x.npy")
+        self.unbf_Q = np.load("policy/unbf_Q.npy")
+        self.unbf_x = np.load("policy/unbf_x.npy")
 
-    def choose_act(self, state, T):
-        policy = self.bf_Q[T][state]
-        # print("Policy vector", policy)
-        roulette_selector = roulette.Roulette(policy)
-        action = roulette_selector.select()
-        # print("Action selected:", action)
-        return action
-
-    def choose_act_phi(self, state, T):
-        policy = self.phi_Q[T][state]
-        # print("Policy vector", policy)
+    def choose_act(self, state, T, alg):
+        if alg == UNC:
+            policy = self.un_Q[T][state]
+        elif alg == SCPHI:
+            policy = self.phi_Q[T][state]
+        elif alg == SCPRO:
+            # note that projection algorithm is stationary
+            policy = self.pro_Q[0][state]
+        elif alg == SCBF:
+            policy = self.bf_Q[T][state]
+        elif alg == SCUBF:
+            policy = self.unbf_Q[T][state]
         roulette_selector = roulette.Roulette(policy)
         action = roulette_selector.select()
         # print("Action selected:", action)
