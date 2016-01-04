@@ -1,4 +1,3 @@
-import numpy as np
 import graphics as cg
 from config import *
 
@@ -17,19 +16,18 @@ class Block:
     def add_car(self, dest, cap):
         self.cap_cur[DESTINATION.index(dest)] += cap
 
-    def congest_prob(self):
-        '''based on the current capacity and bound, return the probability of congestion'''
-        # CONGEST_FACTOR = 1 if we want congest_prob to be 1.0 when current traffic is 2 times than capacity
-        # increase this value to make penalty more harsh for violating upper bound 
-        congest_prob = min(CONGEST_FACTOR * (sum(self.cap_cur) - self.cap_bound) / (self.cap_bound), 1)
+    def transit_prob(self):
+        '''based on the current capacity and bound, return the probability of success transition
+        fundamental diagram should be implemented here: maps current capacity to speed, as a linear function        
+        speed is simulated by transition probability'''
+        traffic_ratio = (sum(self.cap_cur) - self.cap_bound) / (1.0 * self.cap_bound)
+        transit_prob = math.e ** (-traffic_ratio)
+        return transit_prob
 
     def congest(self):
         '''return true if a car can successfuly move into the block, based on current traffic capacity'''
-        if sum(self.cap_cur) >= self.cap_bound: return True
-        else: return False
-        # take this out, for now simply cannot enter congestion state
-        #else:
-        #   return random.random() > self.congest_prob()
+        if sum(self.cap_cur) <= self.cap_bound: return False
+        else: return random.random() >= self.transit_prob()
 
 class World:
     def __init__(self):
@@ -84,13 +82,14 @@ class World:
         self.num_road = self.rows * self.columns - num_off_road
 
     def success_move(self, agent_pos, action):
-        '''determine whether an action of the agent is legal'''
+        '''determine whether an action of the agent is going to be successful'''
+        # check traffic of agent's position
+        if (self.world_map[agent_pos[ROW]][agent_pos[COL]].congest()): return False
         if action == UP: pos = [agent_pos[ROW] - 1, agent_pos[COL]]
         elif action == DOWN: pos = [agent_pos[ROW] + 1, agent_pos[COL]]
         elif action == LEFT: pos = [agent_pos[ROW], agent_pos[COL] - 1]
         elif action == RIGHT: pos = [agent_pos[ROW], agent_pos[COL] + 1]
         elif action == STAY: pos = cp.deepcopy(agent_pos)
-        '''check if a move to a new pos is legal'''
         # check that the agent cannot move out of boundary
         if (pos[ROW] >= self.rows): return False
         if (pos[ROW] < 0): return False
@@ -98,10 +97,7 @@ class World:
         if (pos[COL] < 0): return False
         # check that the agent cannot move offroad
         if self.world_map[pos[ROW]][pos[COL]].block_type == OFFROAD: return False
-        # check the traffic
-        # TBD: take out congestion now, cars can go freely
         return True
-        #return not(self.world_map[pos[ROW]][pos[COL]].congest())
 
     def move_consq(self, agent_pos, action):
         '''return the consequence of taking an action in start position'''
@@ -124,15 +120,8 @@ class World:
         return abs(start_pos[ROW] - dest_pos[ROW]) + abs(start_pos[COL] - dest_pos[COL])
 
     def dist_act(self, agent_pos, action, dest_pos):
-        '''return the resulted distance after taking an action in the current map'''
-        if self.success_move(agent_pos, action):
-            if action == UP: pos = [agent_pos[ROW] - 1, agent_pos[COL]]
-            elif action == DOWN: pos = [agent_pos[ROW] + 1, agent_pos[COL]]
-            elif action == LEFT: pos = [agent_pos[ROW], agent_pos[COL] - 1]
-            elif action == RIGHT: pos = [agent_pos[ROW], agent_pos[COL] + 1]
-            elif action == STAY: pos = cp.deepcopy(agent_pos)
-            return self.dist(pos, dest_pos)
-        else: return self.dist(agent_pos, dest_pos)
+        '''return the resulted distance to destination after taking an action, does not consider traffic'''
+        return self.dist(self.move_consq(agent_pos, action), dest_pos)
 
     def print_cap_map(self):
         '''print capacity map in a table form'''
@@ -143,11 +132,12 @@ class World:
     
     def get_map(self):
         '''return a map to atar algorithm, 0 being passable and 1 being congest or offroad'''
-        astar_map = np.zeros((self.rows, self.columns))
+        astar_map = numpy.zeros((self.rows, self.columns))
         for i in range(self.rows):
             for j in range(self.columns):
                 if self.world_map[i][j].block_type == OFFROAD:
                     astar_map[i][j] = 1
+                # TBD, now this should be a transition probability
                 elif self.world_map[i][j].congest(): 
                     astar_map[i][j] = 1
         return astar_map

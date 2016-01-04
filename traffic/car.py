@@ -29,11 +29,11 @@ class Car:
             self.world.world_map[self.pos[ROW]][self.pos[COL]].rm_car(self.dest, self.cap)
             if (action == UP):
                 self.pos[ROW] -=1
-            if (action == DOWN): 
+            elif (action == DOWN): 
                 self.pos[ROW] +=1
-            if (action == LEFT):
+            elif (action == LEFT):
                 self.pos[COL] -=1
-            if (action == RIGHT):
+            elif (action == RIGHT):
                 self.pos[COL] +=1
             # if action is STAY nothing happens
             self.world.world_map[self.pos[ROW]][self.pos[COL]].add_car(self.dest, self.cap)
@@ -65,10 +65,10 @@ class Car:
         else: self.act = STAY
         # print(path)
     
-    def scmdpbf_act(self, scmdp_selector, episode, state_dict):
+    def sc_act(self, scmdp_selector, episode, state_dict, alg):
         state_vec = [self.pos[ROW], self.pos[COL], self.dest[ROW], self.dest[COL], self.car_type]
         state =  state_dict.get_num(state_vec)
-        self.act = scmdp_selector.choose_act(state,episode)
+        self.act = scmdp_selector.choose_act(state, episode, alg)
 
     def exec_act(self):
         '''execute saved action'''

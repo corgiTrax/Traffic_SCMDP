@@ -219,7 +219,6 @@ class SCMDP:
         np.save("policy/unbf_Q", self.unbf_Q)
         np.save("policy/unbf_x", self.unbf_x)
 
-
     def load_from_file(self):
         self.un_Q = np.load("policy/un_Q.npy")
         self.un_x = np.load("policy/un_x.npy")
@@ -232,19 +231,18 @@ class SCMDP:
         self.unbf_Q = np.load("policy/unbf_Q.npy")
         self.unbf_x = np.load("policy/unbf_x.npy")
 
-    def choose_act(self, state, T):
-#        policy = self.bf_Q[T][state]
-#        policy = self.unbf_Q[T][state]
-        policy = self.pro_Q[0][state]
-        # print("Policy vector", policy)
-        roulette_selector = roulette.Roulette(policy)
-        action = roulette_selector.select()
-        # print("Action selected:", action)
-        return action
-
-    def choose_act_phi(self, state, T):
-        policy = self.phi_Q[T][state]
-        # print("Policy vector", policy)
+    def choose_act(self, state, T, alg):
+        if alg == UNC:
+            policy = self.un_Q[T][state]
+        elif alg == SCPHI:
+            policy = self.phi_Q[T][state]
+        elif alg == SCPRO:
+            # note that projection algorithm is stationary
+            policy = self.pro_Q[0][state]
+        elif alg == SCBF:
+            policy = self.bf_Q[T][state]
+        elif alg == SCUBF:
+            policy = self.unbf_Q[T][state]
         roulette_selector = roulette.Roulette(policy)
         action = roulette_selector.select()
         # print("Action selected:", action)

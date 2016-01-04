@@ -35,7 +35,7 @@ class Experiment:
             self.test_world.draw(isNew = True)
         
         self.state_dict = state.StateDict(self.test_world) 
-        if self.alg == SCMDPBF:
+        if self.alg in [UNC, SCPHI, SCPRO, SCBF, SCUBF]:
             self.scmdp_selector = scmdp.SCMDP(world_ = self.test_world, sdic_ = self.state_dict, T = NUM_EPISODE, m = self.test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
             self.scmdp_selector.load_from_file()
 
@@ -65,15 +65,15 @@ class Experiment:
                 if not(car.arrived):
                     if self.alg == STP:           
                         car.greedy_act() 
-                    if self.alg == ASTAR:
+                    elif self.alg == ASTAR:
                         car.astar_act()
-                    if self.alg == SCMDPBF:
+                    else: 
                         # heuristic to improve efficiency: if total remaining car capacity is smaller than the minimum capacity of the world, cars go free using shortest path
                         if TOTAL_CAP - cap_arrived <= self.test_world.min_cap and SCMDP_STP == True:
                             print("Switched to STP algorithm")
                             car.greedy_act()
                         else:
-                            car.scmdpbf_act(self.scmdp_selector, episode, self.state_dict)
+                            car.sc_act(self.scmdp_selector, episode, self.state_dict, self.alg)
         
             for car in self.cars:
                 if not(car.arrived):
