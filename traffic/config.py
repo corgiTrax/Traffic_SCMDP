@@ -10,7 +10,7 @@ ROW = 0; COL = 1
 NUM_EPISODE = 100
 
 # car 
-NUM_CAR = 400
+NUM_CAR = 1000
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
 
@@ -37,12 +37,12 @@ WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
 # start and destination positions
 CAR_COLOR = ["red", "orange", "yellow", "green"]
-#START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
-#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
+START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
+DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
 #START= [[0,0], [0, WORLD_COLS - 1]]
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0]]
-START= [[0,0]]
-DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
+#START= [[0,0]]
+#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
 REWARD = 1
@@ -62,7 +62,7 @@ ASTAR = 1
 UNC = 2; SCPHI = 3; SCPRO = 4; SCBF = 5; SCUBF = 6
 ALGS = [STP, ASTAR, UNC, SCPHI, SCPRO, SCBF, SCUBF]
 ALGS_NAME = ["STP", "ASTAR", "UNC", "SCPHI", "SCPRO", "SCBF", "SCUBF"]
-ALG = ASTAR
+ALG = STP
 #heuristic to improve efficiency
 SCMDP_STP = True
 

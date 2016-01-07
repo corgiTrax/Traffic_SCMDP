@@ -24,6 +24,7 @@ def heuristic(a, b):
     return abs(b[0] - a[0])  + abs(b[1] - a[1]) 
 
 neighbors = [(0,1),(0,-1),(1,0),(-1,0)] #,(1,1),(1,-1),(-1,1),(-1,-1)]
+random.shuffle(neighbors)
 
 def astar_path(array, start, goal):
 
@@ -47,6 +48,7 @@ def astar_path(array, start, goal):
             return data
 
         close_set.add(current)
+        
         for i, j in neighbors:
             neighbor = current[0] + i, current[1] + j 
             # time based astar algorithm: add transition cost
@@ -67,23 +69,15 @@ def astar_path(array, start, goal):
                 # array bound x walls
                 continue
                 
-            if neighbor in close_set and tentative_g_score > gscore.get(neighbor, 0):
+            if neighbor in close_set and tentative_g_score >= gscore.get(neighbor, 0):
                 continue
 
-            # random tie breaking
-            if  (tentative_g_score == gscore.get(neighbor, 0) or neighbor not in [i[1]for i in oheap]) and random.random()>0.5:
+            if tentative_g_score < gscore.get(neighbor, 0) or neighbor not in [k[1]for k in oheap]:
                 came_from[neighbor] = current
                 gscore[neighbor] = tentative_g_score
                 fscore[neighbor] = tentative_g_score + heuristic(neighbor, goal)
                 heappush(oheap, (fscore[neighbor], neighbor))
-
-            elif  tentative_g_score < gscore.get(neighbor, 0) or neighbor not in [i[1]for i in oheap]:
-                came_from[neighbor] = current
-                gscore[neighbor] = tentative_g_score
-                fscore[neighbor] = tentative_g_score + heuristic(neighbor, goal)
-                heappush(oheap, (fscore[neighbor], neighbor))
-
-                
+              
     return []
 
 '''Here is an example of using my algo with a numpy array,
@@ -113,4 +107,4 @@ if __name__ == "__main__":
     ])
 
     print_matrix(nmap)
-    print(astar_path(nmap, (0,0), (4,4)))
+    print(astar_path(nmap, (2,2), (0,0)))

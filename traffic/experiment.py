@@ -60,7 +60,7 @@ class Experiment:
                 self.test_world.draw()
                 if MOUSE == 1: self.test_world.window.getMouse()
             
-            # cars move simutaneously
+            # cars make decision simutaneously except ASTAR
             for car in self.cars:
                 if not(car.arrived):
                     if self.alg == STP:           
@@ -68,19 +68,27 @@ class Experiment:
                     elif self.alg == ASTAR:
                         car.astar_act()
                     else: 
-                        # heuristic to improve efficiency: if total remaining car capacity is smaller than the minimum capacity of the world, cars go free using shortest path
+                        # heuristic to improve efficiency of SCMDP algorithms
                         if TOTAL_CAP - cap_arrived <= self.test_world.min_cap and SCMDP_STP == True:
                             print("Switched to STP algorithm")
                             car.greedy_act()
                         else:
                             car.sc_act(self.scmdp_selector, episode, self.state_dict, self.alg)
-        
-#            for car in self.cars:
-#                if not(car.arrived):
-                    car.exec_act()
-                    if car.check_arrived(): 
-                        car_arrived += 1
-                        cap_arrived += car.cap
+                    # ASTAR cars move sequentially
+                    if self.alg == ASTAR: 
+                        car.exec_act()
+                        if car.check_arrived(): 
+                            car_arrived += 1
+                            cap_arrived += car.cap
+            
+            # execute the move
+            if self.alg != ASTAR:
+                for car in self.cars:
+                    if not(car.arrived):
+                        car.exec_act()
+                        if car.check_arrived(): 
+                            car_arrived += 1
+                            cap_arrived += car.cap
 
             print("Capacities Arrived at Destinations:"), ;print(cap_arrived)
 
