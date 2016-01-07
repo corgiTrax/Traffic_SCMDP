@@ -130,16 +130,17 @@ class World:
                 print('{:>4}'.format(self.world_map[i][j].cap_bound)),
             print('\n')
     
-    def get_map(self):
-        '''return a map to atar algorithm, 0 being passable and 1 being congest or offroad'''
+    def get_astar_map(self):
+        '''return a map to atar algorithm, 0 being passable and 1 being offroad; 
+        intermediate value indicates cost: congestion probability'''
         astar_map = numpy.zeros((self.rows, self.columns))
         for i in range(self.rows):
             for j in range(self.columns):
                 if self.world_map[i][j].block_type == OFFROAD:
                     astar_map[i][j] = 1
                 # TBD, now this should be a transition probability
-                elif self.world_map[i][j].congest(): 
-                    astar_map[i][j] = 1
+                elif sum(self.world_map[i][j].cap_cur) > self.world_map[i][j].cap_bound: 
+                    astar_map[i][j] = 1 - self.world_map[i][j].transit_prob()
         return astar_map
 
     def print_total_cap(self):

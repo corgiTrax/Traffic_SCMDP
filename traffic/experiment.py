@@ -75,8 +75,8 @@ class Experiment:
                         else:
                             car.sc_act(self.scmdp_selector, episode, self.state_dict, self.alg)
         
-            for car in self.cars:
-                if not(car.arrived):
+#            for car in self.cars:
+#                if not(car.arrived):
                     car.exec_act()
                     if car.check_arrived(): 
                         car_arrived += 1
@@ -95,9 +95,13 @@ class Experiment:
             if MOUSE == 1: self.test_world.window.getMouse()
             print("Car Arrived at Destinations:"), ;print(car_arrived)
 
+
 MOUSE = int(sys.argv[1])                   
-new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp")
-new_exp.run()
+def main():
+    new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp")
+    new_exp.run()
+
+main()
 
 raw_input("Please Press Enter to Exit")
         

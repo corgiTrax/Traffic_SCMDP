@@ -54,7 +54,7 @@ class Car:
 
     def astar_act(self):
         '''an astar (time-based) agent'''
-        path = astar.astar_path(self.world.get_map(), (self.pos[ROW], self.pos[COL]), (self.dest[ROW], self.dest[COL]))
+        path = astar.astar_path(self.world.get_astar_map(), (self.pos[ROW], self.pos[COL]), (self.dest[ROW], self.dest[COL]))
         if len(path) > 0: # has a path
             next_pos = path[-1] 
             if next_pos[ROW] - self.pos[ROW] == -1: act = UP

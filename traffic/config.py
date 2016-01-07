@@ -7,10 +7,10 @@ import math
 ROW = 0; COL = 1
 
 #planning horizon
-NUM_EPISODE = 30
+NUM_EPISODE = 100
 
 # car 
-NUM_CAR = 200
+NUM_CAR = 400
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
 
@@ -30,8 +30,8 @@ TOTAL_CAP = (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP
 # remove constraint at start and destination states
 REMOVE_CONSTRAINT = False
 CAP_MAX = TOTAL_CAP 
-CAP_HZ_ROAD = [100, 100]
-CAP_VT_ROAD = [100, 100]
+CAP_HZ_ROAD = [100, 100, 100]
+CAP_VT_ROAD = [100, 100, 100]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
@@ -62,7 +62,7 @@ ASTAR = 1
 UNC = 2; SCPHI = 3; SCPRO = 4; SCBF = 5; SCUBF = 6
 ALGS = [STP, ASTAR, UNC, SCPHI, SCPRO, SCBF, SCUBF]
 ALGS_NAME = ["STP", "ASTAR", "UNC", "SCPHI", "SCPRO", "SCBF", "SCUBF"]
-ALG = SCUBF
+ALG = ASTAR
 #heuristic to improve efficiency
 SCMDP_STP = True
 
