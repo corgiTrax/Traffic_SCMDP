@@ -11,6 +11,7 @@ from config import *
 import world
 import car
 import state
+import os
 
 np.set_printoptions(linewidth = 1000, precision = 2, suppress = True, threshold = 'nan')
 
@@ -205,31 +206,26 @@ class SCMDP:
         print("unbf_x: "); print(self.unbf_x)
         print("L*unbfx: ");print(np.dot(self.L_cst, self.unbf_x))
 
-
     def save_to_file(self):
         '''save all to .npy files'''
-        np.save("policy/un_Q", self.un_Q)
-        np.save("policy/un_x", self.un_x)
-        np.save("policy/phi_Q", self.phi_Q)
-        np.save("policy/phi_x", self.phi_x)
-        np.save("policy/bf_Q", self.bf_Q)
-        np.save("policy/bf_x", self.bf_x)
-        np.save("policy/pro_Q", self.pro_Q)
-        np.save("policy/pro_x", self.pro_x)
-        np.save("policy/unbf_Q", self.unbf_Q)
-        np.save("policy/unbf_x", self.unbf_x)
+        directory = "policy/world1/" + str(TOTAL_CAP) + "/" 
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        np.save(directory + "un_Q", self.un_Q)
+        np.save(directory + "phi_Q", self.phi_Q)
+        np.save(directory + "bf_Q", self.bf_Q)
+        np.save(directory + "pro_Q", self.pro_Q)
+        np.save(directory + "unbf_Q", self.unbf_Q)
 
     def load_from_file(self):
-        self.un_Q = np.load("policy/un_Q.npy")
-        self.un_x = np.load("policy/un_x.npy")
-        self.phi_Q = np.load("policy/phi_Q.npy")
-        self.phi_x = np.load("policy/phi_x.npy")
-        self.bf_Q = np.load("policy/bf_Q.npy")
-        self.bf_x = np.load("policy/bf_x.npy")
-        self.pro_Q = np.load("policy/pro_Q.npy")
-        self.pro_x = np.load("policy/pro_x.npy")
-        self.unbf_Q = np.load("policy/unbf_Q.npy")
-        self.unbf_x = np.load("policy/unbf_x.npy")
+        directory = "policy/world1/" + str(TOTAL_CAP) + "/" 
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        self.un_Q = np.load(directory + "un_Q.npy")
+        self.phi_Q = np.load(directory + "phi_Q.npy")
+        self.bf_Q = np.load(directory + "bf_Q.npy")
+        self.pro_Q = np.load(directory + "pro_Q.npy")
+        self.unbf_Q = np.load(directory + "unbf_Q.npy")
 
     def choose_act(self, state, T, alg):
         if alg == UNC:

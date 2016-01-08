@@ -6,11 +6,13 @@ import math
 
 ROW = 0; COL = 1
 
+# repeat experiments for each algorithm
+NUM_EXP = 2
 #planning horizon
-NUM_EPISODE = 100
+NUM_EPISODE = 30
 
 # car 
-NUM_CAR = 1000
+NUM_CAR = 200
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
 
@@ -46,7 +48,7 @@ DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_
 
 # get reward at destination
 REWARD = 1
-COST = 0
+COST = -1
 GAMMA = 0.99
 # calculate number of cars at each corner
 INIT_DENSITY_CORNER = 1.0 / (len(START) * len(CAR_TYPE))
@@ -62,7 +64,7 @@ ASTAR = 1
 UNC = 2; SCPHI = 3; SCPRO = 4; SCBF = 5; SCUBF = 6
 ALGS = [STP, ASTAR, UNC, SCPHI, SCPRO, SCBF, SCUBF]
 ALGS_NAME = ["STP", "ASTAR", "UNC", "SCPHI", "SCPRO", "SCBF", "SCUBF"]
-ALG = STP
+ALG = SCUBF
 #heuristic to improve efficiency
 SCMDP_STP = True
 
