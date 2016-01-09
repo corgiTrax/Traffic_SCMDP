@@ -115,14 +115,14 @@ def main():
             if not os.path.exists(directory):
                 os.makedirs(directory)
             filename = directory + str(ALGS_NAME[algorithm]) + str(trial)
-            new_exp = Experiment(alg = algorithm, vis = False, data_file = filenamei, mouse = 0) 
+            new_exp = Experiment(alg = algorithm, vis = False, data_file = filename, mouse = 0) 
             new_exp.run()
 
 def test():
     new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp", mouse = int(sys.argv[1])) 
     new_exp.run()
 
-# main()
+#main()
 test()
 
 raw_input("Please Press Enter to Exit")

@@ -199,13 +199,13 @@ class SCMDP:
 #        print("bf_x: "); print(self.bf_x)
 #        print("L*bfx: ");print(np.dot(self.L_cst, self.bf_x))
 
-        print("pro_Q", self.pro_Q)
-        print("pro_x: "); print(self.pro_x)
-        print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
+#        print("pro_Q", self.pro_Q)
+#        print("pro_x: "); print(self.pro_x)
+#        print("L*prox: ");print(np.dot(self.L_cst, self.pro_x))
 
 #        print("pro_Q", self.pro_Q)
-        print("unbf_x: "); print(self.unbf_x)
-        print("L*unbfx: ");print(np.dot(self.L_cst, self.unbf_x))
+#        print("unbf_x: "); print(self.unbf_x)
+#        print("L*unbfx: ");print(np.dot(self.L_cst, self.unbf_x))
 
     def save_to_file(self):
         '''save all to .npy files'''

@@ -108,7 +108,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     print("Phi_opt", phi_opt)
 
     # number of max iterations for solving bf
-    TO = -1;
+    TO = 50;
     i = 0;
 
     bf_U = cp.deepcopy(phi_U)

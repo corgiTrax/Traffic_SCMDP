@@ -7,12 +7,13 @@ import math
 ROW = 0; COL = 1
 
 # repeat experiments for each algorithm
-NUM_EXP = 10
+NUM_EXP = 1
 #planning horizon
 NUM_EPISODE = 100
 
-# car 
-NUM_CAR = 200
+# car
+NUM_CARS = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+NUM_CAR = NUM_CARS[0]
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
 
@@ -64,7 +65,7 @@ ASTAR = 1
 UNC = 2; SCPHI = 3; SCPRO = 4; SCBF = 5; SCUBF = 6
 ALGS = [STP, ASTAR, UNC, SCPHI, SCPRO, SCBF, SCUBF]
 ALGS_NAME = ["STP", "ASTAR", "UNC", "SCPHI", "SCPRO", "SCBF", "SCUBF"]
-ALG = SCUBF
+ALG = SCBF
 #heuristic to improve efficiency
 SCMDP_STP = True
 
