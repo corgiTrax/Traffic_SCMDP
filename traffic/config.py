@@ -7,9 +7,9 @@ import math
 ROW = 0; COL = 1
 
 # repeat experiments for each algorithm
-NUM_EXP = 2
+NUM_EXP = 10
 #planning horizon
-NUM_EPISODE = 30
+NUM_EPISODE = 100
 
 # car 
 NUM_CAR = 200
