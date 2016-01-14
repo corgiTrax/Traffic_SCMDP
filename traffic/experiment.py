@@ -72,7 +72,7 @@ class Experiment:
                     else: 
                         # heuristic to improve efficiency of SCMDP algorithms
                         if TOTAL_CAP - self.cap_arrived <= self.test_world.min_cap and SCMDP_STP == True:
-                            print("Switched to STP algorithm")
+                            # print("Switched to STP algorithm")
                             car.greedy_act()
                         else:
                             car.sc_act(self.scmdp_selector, episode, self.state_dict, self.alg)
@@ -105,8 +105,7 @@ class Experiment:
             print("Current episode: "), ;print(episode + 1)
             self.test_world.draw()
             if self.mouse == 1: self.test_world.window.getMouse()
-            print("Car Arrived at Destinations:"), ;print(car_arrived)
-
+            print("Capacities Arrived at Destinations:"), ;print(self.cap_arrived)
 
 def main():
     for algorithm in ALGS:
@@ -114,7 +113,7 @@ def main():
             directory = "data/" + str(TOTAL_CAP) + "/" 
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            filename = directory + str(ALGS_NAME[algorithm]) + str(trial)
+            filename = directory + str(ALGS_NAME[algorithm]) + str(trial) + ".data"
             new_exp = Experiment(alg = algorithm, vis = False, data_file = filename, mouse = 0) 
             new_exp.run()
 
@@ -122,8 +121,8 @@ def test():
     new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp", mouse = int(sys.argv[1])) 
     new_exp.run()
 
-#main()
-test()
+main()
+#test()
 
 raw_input("Please Press Enter to Exit")
         

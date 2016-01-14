@@ -114,7 +114,7 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
     bf_U = cp.deepcopy(phi_U)
     bf_Q = cp.deepcopy(phi_Q)
 
-    while i <= TO:
+    while i < TO:
         print("Current step of solving bf: ",i)
         prev_x=cp.deepcopy(bf_x)
         prev_U = cp.deepcopy(bf_U)

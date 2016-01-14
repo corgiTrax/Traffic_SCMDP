@@ -81,15 +81,16 @@ ax1.errorbar(cent_eps, cent_rs_mean, yerr=ss.t.ppf(0.95, cent_dof)*cent_rs_std, 
 ax1.errorbar(rand_eps, rand_rs_mean, yerr=ss.t.ppf(0.95, rand_dof)*rand_rs_std, color = 'b', fmt = 'v', ls = 'dotted', label = "Random")
 ax1.errorbar(safe_eps, safe_rs_mean, yerr=ss.t.ppf(0.95, safe_dof)*safe_rs_std, color = 'k', fmt = '<', ls = 'dotted', label = "Safe")
 ax1.errorbar(grdy_eps, grdy_rs_mean, yerr=ss.t.ppf(0.95, grdy_dof)*grdy_rs_std, color = 'c', fmt = '>', ls = 'dotted', label = "Greedy")
-
+#ax1.errorbar(un_eps, un_rs_mean, yerr=ss.t.ppf(0.95, un_dof)*un_rs_std, color = 'pink', fmt = '+', ls = 'dotted', label = "UNC")
 ax1.errorbar(scphi_eps, scphi_rs_mean, yerr=ss.t.ppf(0.95, scphi_dof)*scphi_rs_std, color = 'm', fmt = 'x', ls = 'dotted', label = "SCPHI")
 ax1.errorbar(scpro_eps, scpro_rs_mean, yerr=ss.t.ppf(0.95, scpro_dof)*scpro_rs_std, color = 'orange', fmt = 'o', ls = 'dotted', label = "SCPRO")
 ax1.errorbar(scbf_eps, scbf_rs_mean, yerr=ss.t.ppf(0.95, scbf_dof)*scbf_rs_std, color = 'g', fmt = 'D', ls = 'dotted', label = "SCBF")
-ax1.errorbar(scubf_eps, scubf_rs_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_rs_std, color = 'r', fmt = '*', ls = 'dotted', label = "SCUBF")
-
+ax1.errorbar(scubf_eps, scubf_rs_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_rs_std, color = 'r', fmt = 's', ls = 'dotted', label = "SCUBF")
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 'upper left')
-#plt.xlim((-1,None))
+plt.ylim((-1,2100))
+plt.xlabel("Episode")
+plt.ylabel("Total Reward Collected")
 plt.show()
 
 # plot violations
@@ -98,17 +99,19 @@ ax1.errorbar(cent_eps, cent_vs_mean, yerr=ss.t.ppf(0.95, cent_dof)*cent_vs_std, 
 ax1.errorbar(rand_eps, rand_vs_mean, yerr=ss.t.ppf(0.95, rand_dof)*rand_vs_std, color = 'b', fmt = 'v', ls = 'dotted', label = "Random")
 ax1.errorbar(safe_eps, safe_vs_mean, yerr=ss.t.ppf(0.95, safe_dof)*safe_vs_std, color = 'k', fmt = '<', ls = 'dotted', label = "Safe")
 ax1.errorbar(grdy_eps, grdy_vs_mean, yerr=ss.t.ppf(0.95, grdy_dof)*grdy_vs_std, color = 'c', fmt = '>', ls = 'dotted', label = "Greedy")
-
+#ax1.errorbar(un_eps, un_vs_mean, yerr=ss.t.ppf(0.95, un_dof)*un_vs_std, color = 'pink', fmt = '+', ls = 'dotted', label = "UNC")
 ax1.errorbar(scphi_eps, scphi_vs_mean, yerr=ss.t.ppf(0.95, scphi_dof)*scphi_vs_std, color = 'm', fmt = 'x', ls = 'dotted', label = "SCPHI")
 ax1.errorbar(scpro_eps, scpro_vs_mean, yerr=ss.t.ppf(0.95, scpro_dof)*scpro_vs_std, color = 'orange', fmt = 'o', ls = 'dotted', label = "SCPRO")
 ax1.errorbar(scbf_eps, scbf_vs_mean, yerr=ss.t.ppf(0.95, scbf_dof)*scbf_vs_std, color = 'g', fmt = 'D', ls = 'dotted', label = "SCBF")
-ax1.errorbar(scubf_eps, scubf_vs_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_vs_std, color = 'r', fmt = '*', ls = 'dotted', label = "SCUBF")
+ax1.errorbar(scubf_eps, scubf_vs_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_vs_std, color = 'r', fmt = 's', ls = 'dotted', label = "SCF")
 
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 'upper left')
 # ax1.set_yscale('symlog', linthreshy = 10)#nonposy='clip')
 #plt.xlim((-1,None))
-#plt.ylim((-100,None))
+plt.ylim((-50,None))
+plt.xlabel("Episode")
+plt.ylabel("Total Violation Count")
 plt.show()
 
 

@@ -7,13 +7,14 @@ import math
 ROW = 0; COL = 1
 
 # repeat experiments for each algorithm
-NUM_EXP = 1
+NUM_EXP = 50
 #planning horizon
-NUM_EPISODE = 100
+NUM_EPISODE = 50
 
 # car
-NUM_CARS = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
-NUM_CAR = NUM_CARS[0]
+NUM_CARS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]
+#NUM_CARS = [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900, 2100, 2300, 2500, 2700, 2900]
+NUM_CAR = NUM_CARS[15]
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
 
@@ -40,12 +41,12 @@ WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
 # start and destination positions
 CAR_COLOR = ["red", "orange", "yellow", "green"]
-START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
-DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
+#START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
+#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
 #START= [[0,0], [0, WORLD_COLS - 1]]
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0]]
-#START= [[0,0]]
-#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
+START= [[0,0]]
+DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
 REWARD = 1
@@ -65,7 +66,7 @@ ASTAR = 1
 UNC = 2; SCPHI = 3; SCPRO = 4; SCBF = 5; SCUBF = 6
 ALGS = [STP, ASTAR, UNC, SCPHI, SCPRO, SCBF, SCUBF]
 ALGS_NAME = ["STP", "ASTAR", "UNC", "SCPHI", "SCPRO", "SCBF", "SCUBF"]
-ALG = SCBF
+ALG = SCUBF
 #heuristic to improve efficiency
 SCMDP_STP = True
 
