@@ -7,14 +7,14 @@ import math
 ROW = 0; COL = 1
 
 # repeat experiments for each algorithm
-NUM_EXP = 50
+NUM_EXP = 1
 #planning horizon
 NUM_EPISODE = 50
 
 # car
-NUM_CARS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]
-#NUM_CARS = [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900, 2100, 2300, 2500, 2700, 2900]
-NUM_CAR = NUM_CARS[15]
+#NUM_CARS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]
+NUM_CARS = [400, 600, 800, 1000, 1200, 1400, 1600, 1800]
+NUM_CAR = NUM_CARS[7]
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
 
@@ -34,19 +34,19 @@ TOTAL_CAP = (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP
 # remove constraint at start and destination states
 REMOVE_CONSTRAINT = False
 CAP_MAX = TOTAL_CAP 
-CAP_HZ_ROAD = [100, 100, 100]
-CAP_VT_ROAD = [100, 100, 100]
+CAP_HZ_ROAD = [100, 90, 120, 100]
+CAP_VT_ROAD = [100, 110, 80, 100]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
 # start and destination positions
 CAR_COLOR = ["red", "orange", "yellow", "green"]
-#START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
-#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
+START = [[0, 0],[0, WORLD_COLS - 1],[WORLD_ROWS - 1, 0],[WORLD_ROWS - 1, WORLD_COLS - 1]]
+DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_COLS - 1],[0, 0]]
 #START= [[0,0], [0, WORLD_COLS - 1]]
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0]]
-START= [[0,0]]
-DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
+#START= [[0,0]]
+#DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
 REWARD = 1
