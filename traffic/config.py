@@ -13,8 +13,8 @@ NUM_EPISODE = 50
 
 # car
 #NUM_CARS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]
-NUM_CARS = [400, 600, 800, 1000, 1200, 1400, 1600, 1800]
-NUM_CAR = NUM_CARS[7]
+NUM_CARS = [2000, 4000, 6000, 8000, 10000]
+NUM_CAR = NUM_CARS[0]
 STAY = 0; UP = 1; DOWN = 2; LEFT = 3; RIGHT = 4; 
 ACTIONS = [STAY, UP, DOWN, LEFT, RIGHT]
 
@@ -34,8 +34,8 @@ TOTAL_CAP = (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP
 # remove constraint at start and destination states
 REMOVE_CONSTRAINT = False
 CAP_MAX = TOTAL_CAP 
-CAP_HZ_ROAD = [100, 90, 120, 100]
-CAP_VT_ROAD = [100, 110, 80, 100]
+CAP_HZ_ROAD = [500, 450, 600, 500]
+CAP_VT_ROAD = [500, 550, 400, 500]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
@@ -49,8 +49,8 @@ DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1], [WORLD_ROWS - 1, 0], [0, WORLD_
 #DESTINATION = [[WORLD_ROWS - 1, WORLD_COLS - 1]]
 
 # get reward at destination
-REWARD = 1
-COST = -1
+REWARD = 10
+COST = 0
 GAMMA = 0.99
 # calculate number of cars at each corner
 INIT_DENSITY_CORNER = 1.0 / (len(START) * len(CAR_TYPE))

@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 import copy as cp
 import scipy.stats as ss
 import math
-NUM_EXP = 50
+NUM_EXP = 1
 NUM_EPISODE = 50
-NUM_CARS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]
+NUM_CARS = [8000, 9000, 20000]
 CAPS = []
 for car in NUM_CARS:
     CAPS.append(car * 2)
@@ -60,8 +60,8 @@ ax1.errorbar(CAPS, scubf_arr_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_arr_std,
 
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 'upper left')
-plt.ylim((-5, 65))
-plt.xlim((-5, 3800))
+#plt.ylim((-5, 65))
+#plt.xlim((-5, 3800))
 plt.xlabel("Total Capacity")
 plt.ylabel("Throughput (Capacity Arrived/Episode)")
 plt.show()
