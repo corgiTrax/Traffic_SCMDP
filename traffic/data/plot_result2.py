@@ -7,7 +7,7 @@ import scipy.stats as ss
 import math
 NUM_EXP = 1
 NUM_EPISODE = 50
-NUM_CARS = [8000, 9000, 20000]
+NUM_CARS = [2000, 4000, 6000, 8000, 9000, 20000]
 CAPS = []
 for car in NUM_CARS:
     CAPS.append(car * 2)

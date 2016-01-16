@@ -7,9 +7,9 @@ import math
 ROW = 0; COL = 1
 
 # repeat experiments for each algorithm
-NUM_EXP = 1
+NUM_EXP = 50
 #planning horizon
-NUM_EPISODE = 50
+NUM_EPISODE = 100
 
 # car
 #NUM_CARS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]
@@ -34,8 +34,8 @@ TOTAL_CAP = (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP
 # remove constraint at start and destination states
 REMOVE_CONSTRAINT = False
 CAP_MAX = TOTAL_CAP 
-CAP_HZ_ROAD = [500, 450, 600, 500]
-CAP_VT_ROAD = [500, 550, 400, 500]
+CAP_HZ_ROAD = [500, 450, 500, 600, 500]
+CAP_VT_ROAD = [500, 550, 500, 400, 500]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 WORLD_COLS = (len(CAP_VT_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
 
