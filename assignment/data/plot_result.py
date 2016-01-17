@@ -85,7 +85,7 @@ ax1.errorbar(grdy_eps, grdy_rs_mean, yerr=ss.t.ppf(0.95, grdy_dof)*grdy_rs_std, 
 ax1.errorbar(scphi_eps, scphi_rs_mean, yerr=ss.t.ppf(0.95, scphi_dof)*scphi_rs_std, color = 'm', fmt = 'x', ls = 'dotted', label = "SCPHI")
 ax1.errorbar(scpro_eps, scpro_rs_mean, yerr=ss.t.ppf(0.95, scpro_dof)*scpro_rs_std, color = 'orange', fmt = 'o', ls = 'dotted', label = "SCPRO")
 ax1.errorbar(scbf_eps, scbf_rs_mean, yerr=ss.t.ppf(0.95, scbf_dof)*scbf_rs_std, color = 'g', fmt = 'D', ls = 'dotted', label = "SCBF")
-ax1.errorbar(scubf_eps, scubf_rs_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_rs_std, color = 'r', fmt = 's', ls = 'dotted', label = "SCUBF")
+ax1.errorbar(scubf_eps, scubf_rs_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_rs_std, color = 'r', fmt = 's', ls = 'dotted', label = "SCF")
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 'upper left')
 plt.ylim((-1,2100))

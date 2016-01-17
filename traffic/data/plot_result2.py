@@ -7,12 +7,12 @@ import scipy.stats as ss
 import math
 NUM_EXP = 1
 NUM_EPISODE = 50
-NUM_CARS = [2000, 4000, 6000, 8000, 9000, 20000]
+NUM_CARS = [300, 600, 900, 1200, 1500, 1800, 2100, 2400, 2700, 3000, 3300, 3600, 3900, 4200, 4500, 4800, 5100, 5400]
 CAPS = []
 for car in NUM_CARS:
     CAPS.append(car * 2)
 
-def process_file(filename, cap):
+def process_file(filename):
     data_file = open(filename, 'r')
     arrived = 0
     for i, line in enumerate(data_file):
@@ -25,11 +25,11 @@ def process_file(filename, cap):
 def process_data(name):
     arr = []
     
-    for cap in CAPS:
+    for car in NUM_CARS:
         arr_ = []
         for i in range(NUM_EXP):
-            filename = str(cap) +'/' + name + str(i) + ".data"
-            arr_.append(process_file(filename, cap))
+            filename = str(car) +'/' + name + str(i) + ".data"
+            arr_.append(process_file(filename))
         arr.append(cp.deepcopy(arr_))
     
     arr = np.array(arr)

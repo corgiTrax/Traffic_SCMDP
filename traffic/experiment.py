@@ -110,7 +110,7 @@ class Experiment:
 def main():
     for algorithm in ALGS:
         for trial in range(NUM_EXP):
-            directory = "data/" + str(TOTAL_CAP) + "/" 
+            directory = "data/" + str(NUM_CAR) + "/" 
             if not os.path.exists(directory):
                 os.makedirs(directory)
             filename = directory + str(ALGS_NAME[algorithm]) + str(trial) + ".data"

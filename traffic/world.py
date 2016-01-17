@@ -184,14 +184,14 @@ class World:
                     block = cg.Rectangle(cg.Point(j * CELL_SIZE, i * CELL_SIZE), cg.Point((j + 1) * CELL_SIZE, (i + 1) * CELL_SIZE))
                     # normal traffic situation
                     if self.world_map[i][j].cap_bound > sum(self.world_map[i][j].cap_cur): 
-                        block.setFill("black")
+                        block.setFill("white")
                     else: # traffic jam
                         block.setFill("pink")
                     block.draw(self.window)
                     if not([i,j] in START or [i,j] in DESTINATION):
                         cap_bound = cg.Text(cg.Point((j + 0.25) * CELL_SIZE, (i + 0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
                         cap_bound.setSize(12)
-                        cap_bound.setFill("white")
+                        #cap_bound.setFill("white")
                         cap_bound.draw(self.window)
                     # draw car count for each set of cars
                     #TBD note this print out only works for 4 or less destinations
