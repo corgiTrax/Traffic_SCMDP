@@ -8,8 +8,8 @@ import math
 dirname = sys.argv[1]
 #TOTAL_CAP = float(sys.argv[2])
 NUM_EXP = int(sys.argv[2])
-# plot only every INTERVAL element, not in use
-CAP = int(sys.argv[3]) * 2
+CAP = int(sys.argv[3]) * 2 # input is the num of cars
+# plot only every INTERVAL element
 INTERVAL = int(sys.argv[4])
 
 def skip_array(array):

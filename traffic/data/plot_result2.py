@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 import copy as cp
 import scipy.stats as ss
 import math
-NUM_EXP = 1
+NUM_EXP = 50
 NUM_EPISODE = 50
-NUM_CARS = [300, 600, 900, 1200, 1500, 1800, 2100, 2400, 2700, 3000, 3300, 3600, 3900, 4200, 4500, 4800, 5100, 5400]
+NUM_CARS = [500, 1000, 1500, 2000, 2500, 3000, 3500]#, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000]
 CAPS = []
 for car in NUM_CARS:
     CAPS.append(car * 2)
