@@ -34,8 +34,8 @@ TOTAL_CAP = (NUM_CAR / len(CAR_TYPE) * CAP_SMALL + NUM_CAR / len(CAR_TYPE) * CAP
 # remove constraint at start and destination states
 REMOVE_CONSTRAINT = True
 CAP_MAX = TOTAL_CAP 
-CAP_HZ_ROAD = [500, 450, 500, 600, 500]
-CAP_VT_ROAD = [500, 550, 500, 400, 500]
+CAP_HZ_ROAD = [500, 450, 600, 500]
+CAP_VT_ROAD = [500, 550, 400, 500]
 #CAP_HZ_ROAD = [500, 500, 500]
 #CAP_VT_ROAD = [500, 500, 500]
 WORLD_ROWS = (len(CAP_HZ_ROAD) - 1) * (NUM_BLK_BTW + 1) + 1
