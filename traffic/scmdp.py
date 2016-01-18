@@ -209,7 +209,7 @@ class SCMDP:
 
     def save_to_file(self):
         '''save all to .npy files'''
-        directory = "policy/world1/" + str(NUM_CAR) + "/" 
+        directory = "policy/world2/" + str(NUM_CAR) + "/" 
         if not os.path.exists(directory):
             os.makedirs(directory)
         np.save(directory + "un_Q", self.un_Q)
@@ -219,7 +219,7 @@ class SCMDP:
         np.save(directory + "unbf_Q", self.unbf_Q)
 
     def load_from_file(self):
-        directory = "policy/world1/" + str(NUM_CAR) + "/" 
+        directory = "policy/world2/" + str(NUM_CAR) + "/" 
         if not os.path.exists(directory):
             os.makedirs(directory)
         self.un_Q = np.load(directory + "un_Q.npy")
