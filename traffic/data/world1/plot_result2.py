@@ -18,7 +18,7 @@ def process_file(filename):
     for i, line in enumerate(data_file):
         if i == NUM_EPISODE - 2: # remember last step there's no decision
             data = re.split(',|\n', line)
-            arrived = float(data[1]) / NUM_EPISODE
+            arrived = float(data[1]) #/ NUM_EPISODE
     data_file.close()
     return arrived
 
@@ -60,10 +60,10 @@ ax1.errorbar(CAPS, scubf_arr_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_arr_std,
 
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 'upper left')
-#plt.ylim((-5, 65))
+plt.ylim((-1000, None))
 #plt.xlim((-5, 3800))
 plt.xlabel("Total Vehicle Capacity at Starting Position")
-plt.ylabel("Average Throughput (Capacity Arrived per Episode)")
+plt.ylabel("Capacity Arrived within 50 episodes")
 plt.show()
 # ax1.set_yscale('symlog', linthreshy = 10)#nonposy='clip')
 
