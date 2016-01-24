@@ -121,8 +121,8 @@ def test():
     new_exp = Experiment(alg = ALG, vis = False, data_file = "data/temp", mouse = int(sys.argv[1])) 
     new_exp.run()
 
-main()
-#test()
+#main()
+test()
 
 raw_input("Please Press Enter to Exit")
         
