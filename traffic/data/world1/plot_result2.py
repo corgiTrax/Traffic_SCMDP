@@ -7,7 +7,7 @@ import scipy.stats as ss
 import math
 NUM_EXP = 50
 NUM_EPISODE = 50
-NUM_CARS = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500]#, 10000]
+NUM_CARS = [500, 1000, 1500, 2000, 2500, 3000]#, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500]#, 10000]
 CAPS = []
 for car in NUM_CARS:
     CAPS.append(car * 2)
@@ -62,8 +62,8 @@ handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 'upper left')
 plt.ylim((-1000, None))
 #plt.xlim((-5, 3800))
-plt.xlabel("Total Vehicle Capacity at Starting Position")
-plt.ylabel("Capacity Arrived within 50 episodes")
+plt.xlabel("Total Vehicle Capacity at Starting Position", fontsize = 20)
+plt.ylabel("Capacity Arrived within 50 steps", fontsize = 20)
 font = {'size': 16}
 plt.rc('font', **font)
 plt.show()

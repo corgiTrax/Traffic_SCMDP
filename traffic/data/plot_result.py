@@ -76,8 +76,8 @@ ax1.errorbar(scubf_eps, scubf_arr_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_arr
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 4, framealpha = 0.5)
 #plt.ylim((None, 1.5))
-plt.xlabel("Episode")
-plt.ylabel("Ratio of Capacity Arrivied")
+plt.xlabel("Time Step", fontsize = 20)
+plt.ylabel("Ratio of Capacity Arrivied", fontsize = 20)
 font = {'size': 16}
 plt.rc('font', **font)
 plt.show()
