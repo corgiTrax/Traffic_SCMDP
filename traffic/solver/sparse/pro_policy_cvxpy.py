@@ -42,7 +42,7 @@ def policy(G, R, L, d, un_Q, un_M, un_U, U_next, U_ref, opt_ref, gamma):
 
     # Form and solve problem.
     prob = cvxpy.Problem(obj, constraints)
-#    prob.solve(solver = CVXOPT, verbose = True)
-    prob.solve(solver = cvxpy.ECOS, verbose = False, max_iters = 10000)
+    prob.solve(solver = cvxpy.ECOS, verbose = False, max_iters = 2000, feastol = 1e-4, reltol = 1e-4, abstol = 1e-4)
+#    prob.solve(solver = cvxpy.CVXOPT, verbose = True)
 
     return U.value, Q.value, M.value

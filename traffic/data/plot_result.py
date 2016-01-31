@@ -57,7 +57,7 @@ def process_data(name):
 
 stp_dof, stp_eps, stp_arr_mean, stp_arr_std = process_data("STP")
 astar_dof, astar_eps, astar_arr_mean, astar_arr_std = process_data("ASTAR")
-un_dof, un_eps, un_arr_mean, un_arr_std = process_data("UNC")
+#un_dof, un_eps, un_arr_mean, un_arr_std = process_data("UNC")
 scphi_dof, scphi_eps, scphi_arr_mean, scphi_arr_std = process_data("SCPHI")
 scpro_dof, scpro_eps, scpro_arr_mean, scpro_arr_std = process_data("SCPRO")
 scbf_dof, scbf_eps, scbf_arr_mean, scbf_arr_std = process_data("SCBF")
@@ -76,8 +76,8 @@ ax1.errorbar(scubf_eps, scubf_arr_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_arr
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 4, framealpha = 0.5)
 #plt.ylim((None, 1.5))
-plt.xlabel("Episode")
-plt.ylabel("Ratio of Capacity Arrivied")
+plt.xlabel("Time Step", fontsize = 20)
+plt.ylabel("Ratio of Capacity Arrivied", fontsize = 20)
 font = {'size': 16}
 plt.rc('font', **font)
 plt.show()

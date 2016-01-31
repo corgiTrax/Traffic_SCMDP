@@ -37,7 +37,7 @@ class Experiment:
         self.mouse = mouse
 
         self.state_dict = state.StateDict(self.test_world) 
-        if self.alg in [UNC, SCPHI, SCPRO, SCBF, SCUBF]:
+        if self.alg in [SCPHI, SCPRO, SCBF, SCUBF]:
             self.scmdp_selector = scmdp.SCMDP(world_ = self.test_world, sdic_ = self.state_dict, T = NUM_EPISODE, m = self.test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
             self.scmdp_selector.load_from_file()
 
@@ -121,8 +121,8 @@ def test():
     new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp", mouse = int(sys.argv[1])) 
     new_exp.run()
 
-#main()
-test()
+main()
+#test()
 
 raw_input("Please Press Enter to Exit")
         

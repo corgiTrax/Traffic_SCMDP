@@ -89,8 +89,8 @@ ax1.errorbar(scubf_eps, scubf_rs_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_rs_s
 handles, labels = ax1.get_legend_handles_labels()
 ax1.legend(handles, labels, loc = 'upper left', frameon = False)
 plt.ylim((-1,2100))
-plt.xlabel("Episode")
-plt.ylabel("Total Reward Collected")
+plt.xlabel("Time Step", fontsize = 24)
+plt.ylabel("Total Reward Collected", fontsize = 24)
 font = {'size': 16}
 plt.rc('font', **font)
 plt.show()
@@ -112,10 +112,10 @@ ax1.legend(handles, labels, loc = 'upper left', frameon = False)
 # ax1.set_yscale('symlog', linthreshy = 10)#nonposy='clip')
 #plt.xlim((-1,None))
 plt.ylim((-50,None))
-plt.xlabel("Episode")
+plt.xlabel("Time Step", fontsize = 24)
 font = {'size': 16}
 plt.rc('font', **font)
-plt.ylabel("Total Violation Count")
+plt.ylabel("Total Violation Count", fontsize = 24)
 plt.show()
 
 
