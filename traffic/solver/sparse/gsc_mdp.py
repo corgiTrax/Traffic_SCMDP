@@ -89,6 +89,8 @@ def mdp_cvxpy(G_3D, R, RT, L, d, x0, gamma):
         print("Current step of solving unbf: ",j)
         unbf_Q[j,:,:], unbf_M[j,:,:], unbf_x[:,[j + 1]] = bfpy.policy_unU2(G, R[j,:,:], L, d, unbf_x[:,[j]], un_U[:,j + 1],  gamma)
 
+    return unbf_Q, unbf_x
+
 #    print("un_u: ")
 #    print(un_U)
 

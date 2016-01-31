@@ -37,7 +37,7 @@ class Experiment:
         self.mouse = mouse
 
         self.state_dict = state.StateDict(self.test_world) 
-        if self.alg in [UNC, SCPHI, SCPRO, SCBF, SCUBF]:
+        if self.alg in [SCPHI, SCPRO, SCBF, SCUBF]:
             self.scmdp_selector = scmdp.SCMDP(world_ = self.test_world, sdic_ = self.state_dict, T = NUM_EPISODE, m = self.test_world.num_road, A = len(ACTIONS), trans_suc_rate = TRANS_SUC_RATE)
             self.scmdp_selector.load_from_file()
 
@@ -108,7 +108,7 @@ class Experiment:
             print("Capacities Arrived at Destinations:"), ;print(self.cap_arrived)
 
 def main():
-    for algorithm in ALGS:
+    for algorithm in [SCUBF]: #ALGS:
         for trial in range(NUM_EXP):
             directory = "data/" + str(NUM_CAR) + "/" 
             if not os.path.exists(directory):
