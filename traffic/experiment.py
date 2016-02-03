@@ -108,7 +108,7 @@ class Experiment:
             print("Capacities Arrived at Destinations:"), ;print(self.cap_arrived)
 
 def main():
-    for algorithm in ALGS:
+    for algorithm in [SCUBF]: #ALGS:
         for trial in range(NUM_EXP):
             directory = "data/" + str(NUM_CAR) + "/" 
             if not os.path.exists(directory):
@@ -121,8 +121,8 @@ def test():
     new_exp = Experiment(alg = ALG, vis = True, data_file = "data/temp", mouse = int(sys.argv[1])) 
     new_exp.run()
 
-main()
-#test()
+#main()
+test()
 
 raw_input("Please Press Enter to Exit")
         

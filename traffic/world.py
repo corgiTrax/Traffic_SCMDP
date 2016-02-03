@@ -190,7 +190,7 @@ class World:
                     block.draw(self.window)
                     if not([i,j] in START or [i,j] in DESTINATION):
                         cap_bound = cg.Text(cg.Point((j + 0.25) * CELL_SIZE, (i + 0.25) * CELL_SIZE),str(self.world_map[i][j].cap_bound))
-                        cap_bound.setSize(15)
+                        cap_bound.setSize(18)
                         #cap_bound.setFill("white")
                         cap_bound.draw(self.window)
                     # draw car count for each set of cars
@@ -199,7 +199,7 @@ class World:
                     offsets = [[offset, offset], [-offset, offset], [offset, -offset], [-offset, -offset]]
                     for k in range(len(DESTINATION)):
                         cap_cur = cg.Text(cg.Point((j + 0.625 + offsets[k][0]) * CELL_SIZE, (i + 0.625 + offsets[k][1]) * CELL_SIZE),str(self.world_map[i][j].cap_cur[k]))
-                        cap_cur.setSize(15)
+                        cap_cur.setSize(18)
                         cap_cur.setFill(CAR_COLOR[k])
                         cap_cur.draw(self.window)
 

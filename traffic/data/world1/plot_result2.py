@@ -51,7 +51,7 @@ scubf_dof, scubf_arr_mean, scubf_arr_std = process_data("SCUBF")
 # plot arrival over episodes
 fig, (ax1) = plt.subplots(1,1)
 ax1.errorbar(CAPS, stp_arr_mean, yerr=ss.t.ppf(0.95, stp_dof)*stp_arr_std, color = 'black', fmt = '^', ls = 'dotted', label="STP")
-ax1.errorbar(CAPS, astar_arr_mean, yerr=ss.t.ppf(0.95, astar_dof)*astar_arr_std, color = 'blue', fmt = '>', ls = 'dotted', label = "TB-ASTAR")
+ax1.errorbar(CAPS, astar_arr_mean, yerr=ss.t.ppf(0.95, astar_dof)*astar_arr_std, color = 'blue', fmt = '>', ls = 'dotted', label = "TB-A*")
 #ax1.errorbar(CAPS, un_arr_mean, yerr=ss.t.ppf(0.95, un_dof)*un_arr_std, color = 'pink', fmt = '+', ls = 'dotted', label = "UNC")
 ax1.errorbar(CAPS, scphi_arr_mean, yerr=ss.t.ppf(0.95, scphi_dof)*scphi_arr_std, color = 'm', fmt = 'x', ls = 'dotted', label = "SCWC")
 ax1.errorbar(CAPS, scpro_arr_mean, yerr=ss.t.ppf(0.95, scpro_dof)*scpro_arr_std, color = 'orange', fmt = 'o', ls = 'dotted', label = "SCPRO")

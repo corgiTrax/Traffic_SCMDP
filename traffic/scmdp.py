@@ -183,8 +183,11 @@ class SCMDP:
 #        print_matrix(self.x0)
 
     def solve(self):
-        [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x, self.pro_Q, self.pro_x, self.unbf_Q, self.unbf_x] = \
+#        [self.un_Q, self.un_x, self.phi_Q, self.phi_x, self.bf_Q, self.bf_x, self.pro_Q, self.pro_x, self.unbf_Q, self.unbf_x] = \
+#        GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+        [self.unbf_Q, self.unbf_x] = \
         GSC.mdp_cvxpy(self.G, self.R, self.RT, self.L, self.d, self.x0, self.gamma)
+
         print("Scmdp policy solved")
 
 #        print("un_Q", self.un_Q)
@@ -212,10 +215,10 @@ class SCMDP:
         directory = "policy/world2/" + str(NUM_CAR) + "/" 
         if not os.path.exists(directory):
             os.makedirs(directory)
-        np.save(directory + "un_Q", self.un_Q)
-        np.save(directory + "phi_Q", self.phi_Q)
-        np.save(directory + "bf_Q", self.bf_Q)
-        np.save(directory + "pro_Q", self.pro_Q)
+#        np.save(directory + "un_Q", self.un_Q)
+#        np.save(directory + "phi_Q", self.phi_Q)
+#        np.save(directory + "bf_Q", self.bf_Q)
+#        np.save(directory + "pro_Q", self.pro_Q)
         np.save(directory + "unbf_Q", self.unbf_Q)
 
     def load_from_file(self):

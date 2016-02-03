@@ -66,7 +66,7 @@ scubf_dof, scubf_eps, scubf_arr_mean, scubf_arr_std = process_data("SCUBF")
 # plot arrival over episodes
 fig, (ax1) = plt.subplots(1,1)
 ax1.errorbar(stp_eps, stp_arr_mean, yerr=ss.t.ppf(0.95, stp_dof)*stp_arr_std, color = 'black', fmt = '^', ls = 'dotted', label="STP")
-ax1.errorbar(astar_eps, astar_arr_mean, yerr=ss.t.ppf(0.95, astar_dof)*astar_arr_std, color = 'blue', fmt = '>', ls = 'dotted', label = "TB-ASTAR")
+ax1.errorbar(astar_eps, astar_arr_mean, yerr=ss.t.ppf(0.95, astar_dof)*astar_arr_std, color = 'blue', fmt = '>', ls = 'dotted', label = "TB-A*")
 #ax1.errorbar(un_eps, un_arr_mean, yerr=ss.t.ppf(0.95, un_dof)*un_arr_std, color = 'pink', fmt = '+', ls = 'dotted', label = "UNC")
 ax1.errorbar(scphi_eps, scphi_arr_mean, yerr=ss.t.ppf(0.95, scphi_dof)*scphi_arr_std, color = 'm', fmt = 'x', ls = 'dotted', label = "SCWC")
 ax1.errorbar(scpro_eps, scpro_arr_mean, yerr=ss.t.ppf(0.95, scpro_dof)*scpro_arr_std, color = 'orange', fmt = 'o', ls = 'dotted', label = "SCPRO")
@@ -74,8 +74,8 @@ ax1.errorbar(scbf_eps, scbf_arr_mean, yerr=ss.t.ppf(0.95, scbf_dof)*scbf_arr_std
 ax1.errorbar(scubf_eps, scubf_arr_mean, yerr=ss.t.ppf(0.95, scubf_dof)*scubf_arr_std, color = 'r', fmt = 's', ls = 'dotted', label = "SCF")
 
 handles, labels = ax1.get_legend_handles_labels()
-ax1.legend(handles, labels, loc = 4, framealpha = 0.5)
-#plt.ylim((None, 1.5))
+ax1.legend(handles, labels, loc = "upper left", framealpha = 0.5, ncol = 3)
+plt.ylim((None, 1.5))
 plt.xlabel("Time Step", fontsize = 24)
 plt.ylabel("Ratio of Capacity Arrivied", fontsize = 24)
 font = {'size': 16}
